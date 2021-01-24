@@ -1,0 +1,18 @@
+import React, { useRef } from 'react';
+import { View, StyleSheet } from 'react-native';
+import Cup from './Cup';
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});
+
+const CupRowContainer = ({ cupSize, cupRow, onPress }) => (
+  <View style={[styles.container, { marginVertical: -cupSize * 0.07 }]}>
+    {cupRow.map((data) => <Cup cupSize={cupSize} onPress={onPress} key={data?.id} data={data} />)}
+  </View>
+);
+
+export default CupRowContainer;

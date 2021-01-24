@@ -13,7 +13,7 @@ const CounterExample = () => {
   const [counter, setCounter] = useState(0);
 
   return (
-    <View style={StyleSheet}>
+    <View>
       <Button onPress={() => setCounter(counter - 1)} title="Decrease" />
       <Text style={styles.counter}>{counter}</Text>
       <Button onPress={() => setCounter(counter + 1)} title="Increase" />
