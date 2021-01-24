@@ -21,7 +21,7 @@ const DummyScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.helloWorld}>Hello world</Text>
-      <Button onPress={() => navigate('Dummy2')} title="Navigate" />
+      <Button onPress={() => navigate('Match')} title="Navigate" />
     </SafeAreaView>
   );
 };
