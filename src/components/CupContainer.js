@@ -5,6 +5,14 @@ import CupRowContainer from './CupRowContainer';
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+  },
+  missButton: {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    backgroundColor: '#fff',
+    borderRadius: 3,
   },
 });
 
@@ -100,7 +108,9 @@ const CupContainer = ({ logEvent }) => {
   return (
     <View onLayout={onLayout} style={styles.container}>
       {formation.map((row) => <CupRowContainer key={`itemCount${row.length}`} onPress={handlePress} cupSize={cupSize} cupRow={row} />) }
-      <Button onPress={() => logEvent({ type: 'MISS', state: cupState.current })} title="Miss" />
+      <View style={styles.missButton}>
+        <Button onPress={() => logEvent({ type: 'MISS', state: cupState.current })} title="Miss" />
+      </View>
     </View>
   );
 };

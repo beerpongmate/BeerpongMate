@@ -1,32 +1,28 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  View, StyleSheet, Text, ScrollView,
+  View, StyleSheet,
 } from 'react-native';
 import CupContainer from './CupContainer';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 30,
-
+    margin: 15,
+    padding: 15,
+    borderRadius: 15,
+    borderWidth: 5,
+    borderColor: '#616163',
+    borderBottomWidth: 0,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    backgroundColor: '#e71d36',
   },
 });
 
-const TableContainer = () => {
-  const [log, setLog] = useState('---MATCH START----\n');
-
-  const logEvent = (event) => {
-    setLog(`${log}\n${JSON.stringify(event, null, 2)}`);
-  };
-
-  return (
-    <View style={styles.container}>
-      <CupContainer logEvent={logEvent} />
-      <ScrollView style={{ flex: 1 }}>
-        <Text>{log}</Text>
-      </ScrollView>
-    </View>
-  );
-};
+const TableContainer = ({ logEvent }) => (
+  <View style={styles.container}>
+    <CupContainer logEvent={logEvent} />
+  </View>
+);
 
 export default TableContainer;

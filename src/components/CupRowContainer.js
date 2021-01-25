@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
 });
 
 const CupRowContainer = ({ cupSize, cupRow, onPress }) => (
-  <View style={[styles.container, { marginVertical: -cupSize * 0.07 }]}>
+  <View style={[styles.container, { marginVertical: -cupSize * 0.07, zIndex: cupRow.length }]}>
     {cupRow.map((data) => <Cup cupSize={cupSize} onPress={onPress} key={data?.id} data={data} />)}
   </View>
 );
