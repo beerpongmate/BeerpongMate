@@ -14,7 +14,7 @@ const Cup = ({ cupSize, onPress, data }) => {
     setBallVisible(true);
     Animated.parallel([
       Animated.timing(translateY, {
-        toValue: 0,
+        toValue: cupSize / 4,
         duration: 500,
         useNativeDriver: true,
       }),

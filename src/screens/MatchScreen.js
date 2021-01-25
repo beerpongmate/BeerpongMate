@@ -1,4 +1,6 @@
-import { SafeAreaView, StyleSheet, ScrollView, Text } from 'react-native';
+import {
+  SafeAreaView, StyleSheet, ScrollView, Text,
+} from 'react-native';
 import React, { useState } from 'react';
 import TableContainer from '../components/TableContainer';
 
