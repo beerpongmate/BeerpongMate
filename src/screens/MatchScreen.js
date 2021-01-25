@@ -1,8 +1,10 @@
 import {
   SafeAreaView, StyleSheet, ScrollView, Text,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import TableContainer from '../components/TableContainer';
+import MatchEventTypes from '../constants/MatchEventTypes';
+import StatsContainer from '../components/StatsContainer';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,18 +14,39 @@ const styles = StyleSheet.create({
 });
 
 const MatchScreen = () => {
-  const [log, setLog] = useState('---MATCH START----\n');
+  const eventArray = useRef([]);
+  const [throwCount, setThrowCount] = useState(0);
+  const [hitCount, setHitCount] = useState(0);
+  const [streak, setStreak] = useState(0);
+
+  const handleHit = () => {
+    setThrowCount(throwCount + 1);
+    setHitCount(hitCount + 1);
+    setStreak(streak + 1);
+  };
+
+  const handleMiss = () => {
+    setThrowCount(throwCount + 1);
+    setStreak(0);
+  };
+
+  const eventMap = {
+    [MatchEventTypes.HIT]: handleHit,
+    [MatchEventTypes.MISS]: handleMiss,
+  };
 
   const logEvent = (event) => {
-    setLog(`${log}\n${JSON.stringify(event, null, 2)}`);
+    eventArray.current.push(event);
+    const eventFunction = eventMap[event.type];
+    if (eventFunction !== undefined) {
+      eventFunction();
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <TableContainer logEvent={logEvent} />
-      <ScrollView style={{ flex: 1 }}>
-        <Text>{log}</Text>
-      </ScrollView>
+      <StatsContainer throwCount={throwCount} hitCount={hitCount} streak={streak} />
     </SafeAreaView>
   );
 };

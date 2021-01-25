@@ -2,14 +2,13 @@ import React, { useRef, useState, useEffect } from 'react';
 import { View, StyleSheet, Button } from 'react-native';
 import cloneDeep from 'lodash/cloneDeep';
 import CupRowContainer from './CupRowContainer';
+import MatchEventTypes from '../constants/MatchEventTypes';
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
   },
   missButton: {
-    position: 'absolute',
-    bottom: 0,
+    marginTop: 40,
     width: '100%',
     backgroundColor: '#fff',
     borderRadius: 3,
@@ -73,6 +72,7 @@ const buildFormation = (state, rowCount) => {
 const CupContainer = ({ logEvent }) => {
   const [cupSize, setCupSize] = useState(0);
   const cupState = useRef(cloneDeep(stateMap?.[10].state));
+  const containerHeight = useRef(0);
   const [rows, setRows] = useState(4);
   const [activeCups, setActiveCups] = useState(10);
 
@@ -83,13 +83,19 @@ const CupContainer = ({ logEvent }) => {
       const { state, rows: formationRows } = formationState;
       cupState.current = cloneDeep(state);
       setRows(formationRows);
-      logEvent({ type: 'ORDER', nextRowCount: formationRows, state: cupState.current });
+      logEvent(
+        {
+          type: MatchEventTypes.ORDER,
+          nextRowCount: formationRows,
+          state: cupState.current,
+        },
+      );
     }
   }, [activeCups]);
 
   const handlePress = ({ id }) => {
     cupState.current[id].active = false;
-    logEvent({ type: 'HIT', hitId: id, state: cupState.current });
+    logEvent({ type: MatchEventTypes.HIT, hitId: id, state: cupState.current });
     setActiveCups(activeCups - 1);
   };
 
@@ -103,13 +109,25 @@ const CupContainer = ({ logEvent }) => {
     setCupSize(layoutWidth / 4);
   };
 
+  const onCupsLayout = ({
+    nativeEvent: {
+      layout: {
+        height: layoutHeight,
+      },
+    },
+  }) => {
+    containerHeight.current = layoutHeight;
+  };
+
   const formation = buildFormation(cupState.current, rows);
 
   return (
-    <View onLayout={onLayout} style={styles.container}>
-      {formation.map((row) => <CupRowContainer key={`itemCount${row.length}`} onPress={handlePress} cupSize={cupSize} cupRow={row} />) }
+    <View onLayout={onLayout} style={[styles.container]}>
+      <View onLayout={onCupsLayout} style={{ minHeight: containerHeight.current, zIndex: 10 }}>
+        {formation.map((row) => <CupRowContainer key={`itemCount${row.length}`} onPress={handlePress} cupSize={cupSize} cupRow={row} />) }
+      </View>
       <View style={styles.missButton}>
-        <Button onPress={() => logEvent({ type: 'MISS', state: cupState.current })} title="Miss" />
+        <Button onPress={() => logEvent({ type: MatchEventTypes.MISS, state: cupState.current })} title="Miss" />
       </View>
     </View>
   );
