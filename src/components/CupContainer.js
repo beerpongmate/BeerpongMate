@@ -1,5 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { View, StyleSheet, Button } from 'react-native';
+import {
+  View, StyleSheet, TouchableOpacity, Text,
+} from 'react-native';
 import cloneDeep from 'lodash/cloneDeep';
 import CupRowContainer from './CupRowContainer';
 import MatchEventTypes from '../constants/MatchEventTypes';
@@ -9,9 +11,23 @@ const styles = StyleSheet.create({
   },
   missButton: {
     marginTop: 40,
-    width: '100%',
-    backgroundColor: '#fff',
-    borderRadius: 3,
+    backgroundColor: 'transparent',
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: '#fff',
+    borderStyle: 'dashed',
+    alignSelf: 'center',
+  },
+  buttonLabel: {
+    textDecorationLine: 'underline',
+    fontSize: 24,
+    color: '#fff',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
   },
 });
 
@@ -69,7 +85,9 @@ const buildFormation = (state, rowCount) => {
   return rows;
 };
 
-const CupContainer = ({ logEvent }) => {
+const CupContainer = ({
+  handleEvent, onAnimation, currentPlayer, skipPlayer,
+}) => {
   const [cupSize, setCupSize] = useState(0);
   const cupState = useRef(cloneDeep(stateMap?.[10].state));
   const containerHeight = useRef(0);
@@ -83,7 +101,7 @@ const CupContainer = ({ logEvent }) => {
       const { state, rows: formationRows } = formationState;
       cupState.current = cloneDeep(state);
       setRows(formationRows);
-      logEvent(
+      handleEvent(
         {
           type: MatchEventTypes.ORDER,
           nextRowCount: formationRows,
@@ -95,7 +113,14 @@ const CupContainer = ({ logEvent }) => {
 
   const handlePress = ({ id }) => {
     cupState.current[id].active = false;
-    logEvent({ type: MatchEventTypes.HIT, hitId: id, state: cupState.current });
+    handleEvent(
+      {
+        type: MatchEventTypes.HIT,
+        hitId: id,
+        state: cupState.current,
+        playerId: currentPlayer,
+      },
+    );
     setActiveCups(activeCups - 1);
   };
 
@@ -124,10 +149,29 @@ const CupContainer = ({ logEvent }) => {
   return (
     <View onLayout={onLayout} style={[styles.container]}>
       <View onLayout={onCupsLayout} style={{ minHeight: containerHeight.current, zIndex: 10 }}>
-        {formation.map((row) => <CupRowContainer key={`itemCount${row.length}`} onPress={handlePress} cupSize={cupSize} cupRow={row} />) }
+        {formation.map((row) => <CupRowContainer key={`itemCount${row.length}`} onPress={handlePress} onAnimation={onAnimation} cupSize={cupSize} cupRow={row} />) }
       </View>
-      <View style={styles.missButton}>
-        <Button onPress={() => logEvent({ type: MatchEventTypes.MISS, state: cupState.current })} title="Miss" />
+      <View style={styles.row}>
+        <TouchableOpacity
+          style={styles.missButton}
+          onPress={skipPlayer}
+        >
+          <Text style={styles.buttonLabel}>SKIP</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.missButton}
+          onPress={
+          () => handleEvent(
+            {
+              type: MatchEventTypes.MISS,
+              state: cupState.current,
+              playerId: currentPlayer,
+            },
+          )
+        }
+        >
+          <Text style={styles.buttonLabel}>MISS</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

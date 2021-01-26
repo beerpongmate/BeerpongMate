@@ -10,10 +10,10 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: theme.tableInnerBorder,
+    borderColor: theme.colors.tableInnerBorder,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    backgroundColor: theme.table,
+    backgroundColor: theme.colors.table,
   },
   tableBorder: {
     margin: 15,
@@ -21,19 +21,24 @@ const styles = StyleSheet.create({
     padding: 1,
     borderRadius: 15,
     borderWidth: 5,
-    borderColor: theme.tableOuterBorder,
+    borderColor: theme.colors.tableOuterBorder,
     borderBottomWidth: 3,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    backgroundColor: theme.tableInnerBorder,
+    backgroundColor: theme.colors.tableInnerBorder,
     zIndex: 5,
   },
 });
 
-const TableContainer = ({ logEvent }) => (
+const TableContainer = ({ handleEvent, onAnimation, currentPlayer, skipPlayer }) => (
   <View style={styles.tableBorder}>
     <View style={styles.container}>
-      <CupContainer logEvent={logEvent} />
+      <CupContainer
+        handleEvent={handleEvent}
+        onAnimation={onAnimation}
+        currentPlayer={currentPlayer}
+        skipPlayer={skipPlayer}
+      />
     </View>
   </View>
 );
