@@ -6,7 +6,7 @@ import {
 const cupImage = require('../../assets/images/Cup.png');
 
 const Cup = ({ cupSize, onPress, data }) => {
-  const translateY = useRef(new Animated.Value(300)).current;
+  const translateY = useRef(new Animated.Value(800)).current;
   const scale = useRef(new Animated.Value(1)).current;
   const [ballVisible, setBallVisible] = useState(false);
 
