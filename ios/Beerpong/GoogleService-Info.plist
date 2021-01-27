@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>165856288901-d5n4t7l1sir1s32uvaj0nh10u0215557.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.165856288901-d5n4t7l1sir1s32uvaj0nh10u0215557</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD7Fo0GcH-r_oMd-PUKQKDpC5Rcxfa9Q4A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>165856288901</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.beerpongmate</string>
+	<key>PROJECT_ID</key>
+	<string>beerpongmate</string>
+	<key>STORAGE_BUCKET</key>
+	<string>beerpongmate.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:165856288901:ios:c939fb26ecc1c091e389ec</string>
+</dict>
+</plist>

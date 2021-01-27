@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "165856288901",
+    "project_id": "beerpongmate",
+    "storage_bucket": "beerpongmate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:165856288901:android:a35f438d240af341e389ec",
+        "android_client_info": {
+          "package_name": "com.beerpongmate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "165856288901-t43o6i6i7fa3ar7po0b94ipdcm7uh4f0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBRKEiU30ET0fgafMM5BczH0tP-l7ysUuk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "165856288901-t43o6i6i7fa3ar7po0b94ipdcm7uh4f0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

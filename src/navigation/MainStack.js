@@ -1,13 +1,17 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import DummyScreen from '../screens/DummyScreen';
 import MatchScreen from '../screens/MatchScreen';
+import WelcomeScreen from '../screens/WelcomeScreen';
+import SignInScreen from '../screens/SignInScreen';
+import OnlineScreen from '../screens/OnlineScreen';
 
 const Stack = createStackNavigator();
 
 const MainStack = () => (
-  <Stack.Navigator initialRouteName="Dummy">
-    <Stack.Screen name="Dummy" component={DummyScreen} />
+  <Stack.Navigator initialRouteName="Welcome">
+    <Stack.Screen name="Welcome" component={WelcomeScreen} />
+    <Stack.Screen name="SignIn" component={SignInScreen} />
+    <Stack.Screen name="Online" component={OnlineScreen} />
     <Stack.Screen name="Match" component={MatchScreen} />
   </Stack.Navigator>
 );

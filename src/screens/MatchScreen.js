@@ -31,11 +31,11 @@ const initialStats = {
 const defaultPlayers = [
   {
     name: 'Harold',
-    id: '000',
+    uid: '000',
   },
   {
     name: 'Kumar',
-    id: '001',
+    uid: '001',
   },
 ];
 
@@ -44,12 +44,13 @@ const MatchScreen = ({ route }) => {
   const stats = useRef({});
   const [isAnimating, setAnimating] = useState(false);
   const [playerIndex, setPlayerIndex] = useState(undefined);
+  const [round, setRound] = useState(0);
 
-  const { players = defaultPlayers } = route?.params || {};
+  const { players = defaultPlayers, online = false } = route?.params || {};
 
   useEffect(() => {
-    players.forEach(({ id, ...playerData }) => {
-      stats.current[id] = {
+    players.forEach(({ uid, ...playerData }) => {
+      stats.current[uid] = {
         ...playerData,
         throwCount: 0,
         hitCount: 0,
@@ -62,6 +63,7 @@ const MatchScreen = ({ route }) => {
   const nextPlayer = () => {
     if (playerIndex === players.length - 1) {
       setPlayerIndex(0);
+      setRound(round + 1);
     } else {
       setPlayerIndex(playerIndex + 1);
     }
@@ -115,10 +117,12 @@ const MatchScreen = ({ route }) => {
       <TableContainer
         handleEvent={handleEvent}
         onAnimation={handleAnimation}
-        currentPlayer={players[playerIndex]?.id}
+        currentPlayerId={players[playerIndex]?.uid}
         skipPlayer={nextPlayer}
+        playerCount={players.length}
       />
-      <StatsContainer stats={stats.current} playerId={players[playerIndex]?.id} />
+      {!online
+      && (<StatsContainer stats={stats.current} playerId={players[playerIndex]?.uid} round={round} />)}
       {isAnimating && <View style={styles.interactionBlock} />}
     </SafeAreaView>
   );

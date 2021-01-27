@@ -86,7 +86,7 @@ const buildFormation = (state, rowCount) => {
 };
 
 const CupContainer = ({
-  handleEvent, onAnimation, currentPlayer, skipPlayer,
+  handleEvent, onAnimation, currentPlayerId, skipPlayer, playerCount,
 }) => {
   const [cupSize, setCupSize] = useState(0);
   const cupState = useRef(cloneDeep(stateMap?.[10].state));
@@ -118,7 +118,7 @@ const CupContainer = ({
         type: MatchEventTypes.HIT,
         hitId: id,
         state: cupState.current,
-        playerId: currentPlayer,
+        playerId: currentPlayerId,
       },
     );
     setActiveCups(activeCups - 1);
@@ -152,12 +152,14 @@ const CupContainer = ({
         {formation.map((row) => <CupRowContainer key={`itemCount${row.length}`} onPress={handlePress} onAnimation={onAnimation} cupSize={cupSize} cupRow={row} />) }
       </View>
       <View style={styles.row}>
+        {playerCount > 1 && (
         <TouchableOpacity
           style={styles.missButton}
           onPress={skipPlayer}
         >
           <Text style={styles.buttonLabel}>SKIP</Text>
         </TouchableOpacity>
+        )}
         <TouchableOpacity
           style={styles.missButton}
           onPress={
@@ -165,7 +167,7 @@ const CupContainer = ({
             {
               type: MatchEventTypes.MISS,
               state: cupState.current,
-              playerId: currentPlayer,
+              playerId: currentPlayerId,
             },
           )
         }
