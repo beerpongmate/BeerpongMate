@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View, StyleSheet, ScrollView,
+  View, StyleSheet, ScrollView, Text, TouchableOpacity,
 } from 'react-native';
 import theme from '../../assets/theme';
 import StatItem from './StatItem';
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     flex: 1,
     margin: 15,
     marginTop: 1,
-    borderColor: theme.tableOuterBorder,
+    borderColor: theme.colors.tableOuterBorder,
     borderWidth: 5,
     borderTopWidth: 3,
     borderBottomLeftRadius: 15,
@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     borderWidth: 1,
-    borderColor: theme.tableInnerBorder,
+    borderColor: theme.colors.tableInnerBorder,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    backgroundColor: theme.table,
+    backgroundColor: theme.colors.table,
     justifyContent: 'space-evenly',
   },
   row: {
@@ -35,22 +35,56 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     marginBottom: 10,
   },
+  playerName: {
+    fontSize: 24,
+    color: '#fff',
+  },
+  button: {
+    marginTop: 5,
+    backgroundColor: 'transparent',
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: '#fff',
+    borderStyle: 'dashed',
+    alignSelf: 'center',
+  },
 });
 
-const StatsContainer = ({ throwCount, hitCount, streak }) => (
-  <View style={styles.tableBorder}>
-    <View style={styles.table}>
-      <ScrollView>
-        <View style={styles.row}>
-          <StatItem stat={throwCount} iconName="circle" label="Throws" />
-          <StatItem stat={hitCount} iconName="cup" label="Hits" />
-        </View>
-        <View style={styles.row}>
-          <StatItem stat={streak} iconName="fire" label="Streak" />
-        </View>
-      </ScrollView>
+const StatsContainer = ({ stats, playerId }) => {
+  const [playerName, setPlayerName] = useState('');
+  const [throwCount, setThrowCount] = useState(0);
+  const [hitCount, setHitCount] = useState(0);
+  const [streak, setStreak] = useState(0);
+
+  useEffect(() => {
+    const playerStats = stats[playerId];
+    const {
+      name, throwCount: thrw, hitCount: hit, streak: str,
+    } = playerStats || {};
+    setPlayerName(name);
+    setThrowCount(thrw);
+    setHitCount(hit);
+    setStreak(str);
+  }, [stats, playerId]);
+
+  return (
+    <View style={styles.tableBorder}>
+      <View style={styles.table}>
+        <ScrollView>
+          <View>
+            <View style={styles.row}><Text style={styles.playerName}>{playerName}</Text></View>
+            <View style={styles.row}>
+              <StatItem stat={throwCount} iconName="circle" label="Throws" />
+              <StatItem stat={hitCount} iconName="cup" label="Hits" />
+            </View>
+            <View style={styles.row}>
+              <StatItem stat={streak} iconName="fire" label="Streak" />
+            </View>
+          </View>
+        </ScrollView>
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default StatsContainer;

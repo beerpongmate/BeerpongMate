@@ -5,12 +5,15 @@ import {
 
 const cupImage = require('../../assets/images/Cup.png');
 
-const Cup = ({ cupSize, onPress, data }) => {
+const Cup = ({
+  cupSize, onPress, data, onAnimation,
+}) => {
   const translateY = useRef(new Animated.Value(800)).current;
   const scale = useRef(new Animated.Value(1)).current;
   const [ballVisible, setBallVisible] = useState(false);
 
   const animateClose = () => {
+    onAnimation(true);
     setBallVisible(true);
     Animated.parallel([
       Animated.timing(translateY, {
@@ -32,7 +35,7 @@ const Cup = ({ cupSize, onPress, data }) => {
       ]),
     ]).start(({ finished }) => {
       if (finished) {
-        setTimeout(() => { onPress(data); }, 200);
+        setTimeout(() => { onPress(data); onAnimation(false); }, 200);
       }
     });
   };

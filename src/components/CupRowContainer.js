@@ -9,9 +9,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const CupRowContainer = ({ cupSize, cupRow, onPress }) => (
+const CupRowContainer = ({
+  cupSize, cupRow, onPress, onAnimation,
+}) => (
   <View style={[styles.container, { marginVertical: -cupSize * 0.07, zIndex: cupRow.length }]}>
-    {cupRow.map((data) => <Cup cupSize={cupSize} onPress={onPress} key={data?.id} data={data} />)}
+    {cupRow.map(
+      (data) => (
+        <Cup
+          cupSize={cupSize}
+          onPress={onPress}
+          onAnimation={onAnimation}
+          key={data?.id}
+          data={data}
+        />
+      ),
+    )}
   </View>
 );
 
