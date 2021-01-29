@@ -50,29 +50,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const StatsContainer = ({ stats, playerId }) => {
-  const [playerName, setPlayerName] = useState('');
-  const [throwCount, setThrowCount] = useState(0);
-  const [hitCount, setHitCount] = useState(0);
-  const [streak, setStreak] = useState(0);
-
-  useEffect(() => {
-    const playerStats = stats[playerId];
-    const {
-      name, throwCount: thrw, hitCount: hit, streak: str,
-    } = playerStats || {};
-    setPlayerName(name);
-    setThrowCount(thrw);
-    setHitCount(hit);
-    setStreak(str);
-  }, [stats, playerId]);
+const StatsContainer = ({ stats = {}, playerId }) => {
+  const {
+    name, throwCount, hitCount, streak,
+  } = stats[playerId] || {};
 
   return (
     <View style={styles.tableBorder}>
       <View style={styles.table}>
         <ScrollView>
           <View>
-            <View style={styles.row}><Text style={styles.playerName}>{playerName}</Text></View>
+            <View style={styles.row}><Text style={styles.playerName}>{name}</Text></View>
             <View style={styles.row}>
               <StatItem stat={throwCount} iconName="circle" label="Throws" />
               <StatItem stat={hitCount} iconName="cup" label="Hits" />

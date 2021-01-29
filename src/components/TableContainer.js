@@ -30,14 +30,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const TableContainer = ({ handleEvent, onAnimation, currentPlayer, skipPlayer }) => (
+const TableContainer = ({ handleEvent, onAnimation, currentPlayerId, skipPlayer, playerCount }) => (
   <View style={styles.tableBorder}>
     <View style={styles.container}>
       <CupContainer
         handleEvent={handleEvent}
         onAnimation={onAnimation}
-        currentPlayer={currentPlayer}
+        currentPlayerId={currentPlayerId}
         skipPlayer={skipPlayer}
+        playerCount={playerCount}
       />
     </View>
   </View>

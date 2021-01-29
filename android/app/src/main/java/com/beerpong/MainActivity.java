@@ -1,4 +1,4 @@
-package com.beerpong;
+package com.beerpongmate;
 
 import com.facebook.react.ReactActivity;
 

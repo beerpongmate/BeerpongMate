@@ -9,13 +9,14 @@ import 'react-native-gesture-handler';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import MainStack from './src/navigation/MainStack';
+import WithUser from './src/components/Providers/WithUser';
 
-const App = () => {
-  return (
+const App = () => (
+  <WithUser>
     <NavigationContainer>
-      <MainStack/>
+      <MainStack />
     </NavigationContainer>
-  );
-};
+  </WithUser>
+);
 
 export default App;
