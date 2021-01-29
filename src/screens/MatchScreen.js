@@ -70,7 +70,6 @@ const MatchScreen = ({ route }) => {
   };
 
   const setThrowCount = (throws, playerId) => {
-    console.log(playerId);
     stats.current[playerId].throwCount = throws;
   };
 

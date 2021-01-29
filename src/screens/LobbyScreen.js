@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  View, SafeAreaView, FlatList, Text,
+  SafeAreaView, FlatList, StyleSheet, Text, Button,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import useLobby from '../components/Providers/useLobby';
+import { useUser } from '../components/Providers/WithUser';
 
 const styles = StyleSheet.create({
   container: {
@@ -14,14 +17,29 @@ const styles = StyleSheet.create({
   },
 });
 
-const LobbyScreen = () => {
-  console.log('gi');
+const LobbyScreen = ({ route }) => {
+  const { navigate, goBack } = useNavigation();
+  const { lobbyId } = route.params;
+  const { user } = useUser();
+  const { lobby, readyUp } = useLobby({ lobbyId, userId: user.uid });
+  const lobbyIsLoaded = useRef(false);
+
+  const players = Object.keys(lobby?.players || {}).map((id) => ({ id, ...lobby.players[id] }));
+
+  useEffect(() => {
+    if (lobby) {
+      lobbyIsLoaded.current = true;
+    }
+
+    if (!lobby && lobbyIsLoaded.current) {
+      goBack();
+    }
+  }, [lobby]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.lobbyContainer}>
-        <FlatList renderItem={(data) => { <Text>{data.host.name}</Text>; }} />
-      </View>
-      <Button onPress={() => navigate('Lobby')} title="Online Match" />
+      <FlatList data={players} renderItem={({ item: { name, ready } }) => (<Text>{`${name} - ${ready ? 'Ready' : 'Not Ready'}`}</Text>)} />
+      <Button onPress={readyUp} title="Ready" />
     </SafeAreaView>
   );
 };
