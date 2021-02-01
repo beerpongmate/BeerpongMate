@@ -2,6 +2,7 @@ import React from 'react';
 import {
   View, SafeAreaView, FlatList, Text, Button, StyleSheet, TouchableOpacity,
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import theme from '../../assets/theme';
 import useLobby from '../components/Providers/useLobby';
 import { useUser } from '../components/Providers/WithUser';
@@ -30,11 +31,18 @@ const styles = StyleSheet.create({
 });
 
 const OnlineScreen = () => {
-  const { lobbies = [], createLobby } = useLobby();
+  const { navigate } = useNavigation();
   const { user } = useUser();
+  const { lobbies = [], createLobby, joinLobby } = useLobby({ userId: user.uid });
 
   const handleCreate = () => {
-    createLobby(getLobbyModel(user));
+    createLobby(getLobbyModel(user)).then((docRef) => {
+      navigate('Lobby', { lobbyId: docRef.id });
+    });
+  };
+
+  const handleJoin = (id) => {
+    joinLobby(id, user).then(() => { navigate('Lobby', { lobbyId: id }); });
   };
 
   console.log(lobbies);
@@ -42,7 +50,7 @@ const OnlineScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.lobbyContainer}>
-        <FlatList data={lobbies} renderItem={({ item: { host: { name } } }) => <TouchableOpacity style={styles.lobby}><Text style={styles.lobbyLabel}>{`${name}'s Lobby`}</Text></TouchableOpacity>} />
+        <FlatList data={lobbies} renderItem={({ item: { id, host: { name } } }) => <TouchableOpacity onPress={() => handleJoin(id)} key={id} style={styles.lobby}><Text style={styles.lobbyLabel}>{`${name}'s Lobby`}</Text></TouchableOpacity>} />
       </View>
       <Button onPress={handleCreate} title="Create Lobby" />
     </SafeAreaView>
