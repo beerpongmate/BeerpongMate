@@ -1,23 +1,21 @@
-import React from 'react';
-import {
-  View, Text, StyleSheet,
-} from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import React from "react";
+import { View, Text, StyleSheet } from "react-native";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   textCenter: {
-    textAlign: 'center',
-    color: '#fff',
+    textAlign: "center",
+    color: "#fff",
   },
   label: {
     fontSize: 18,
   },
   stat: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 

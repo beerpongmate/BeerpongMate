@@ -1,1 +1,4 @@
-export default getUserMatchModel = (user) => ({ name: user?.email, uid: user?.uid });
+export default getUserMatchModel = (user) => ({
+  name: user?.email,
+  uid: user?.uid,
+});

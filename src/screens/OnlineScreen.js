@@ -1,17 +1,23 @@
-import React from 'react';
+import React from "react";
 import {
-  View, SafeAreaView, FlatList, Text, Button, StyleSheet, TouchableOpacity,
-} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import theme from '../../assets/theme';
-import useLobby from '../components/Providers/useLobby';
-import { useUser } from '../components/Providers/WithUser';
-import getLobbyModel from '../utils/getLobbyModel';
+  View,
+  SafeAreaView,
+  FlatList,
+  Text,
+  Button,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import theme from "../../assets/theme";
+import useLobby from "../components/Providers/useLobby";
+import { useUser } from "../components/Providers/WithUser";
+import getLobbyModel from "../utils/getLobbyModel";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 20,
   },
   lobbyContainer: {
@@ -22,8 +28,8 @@ const styles = StyleSheet.create({
   },
   lobby: {
     padding: 20,
-    width: '100%',
-    backgroundColor: '#fff',
+    width: "100%",
+    backgroundColor: "#fff",
   },
   lobbyLabel: {
     color: theme.colors.table,
@@ -33,24 +39,42 @@ const styles = StyleSheet.create({
 const OnlineScreen = () => {
   const { navigate } = useNavigation();
   const { user } = useUser();
-  const { lobbies = [], createLobby, joinLobby } = useLobby({ userId: user.uid });
+  const { lobbies = [], createLobby, joinLobby } = useLobby({
+    userId: user.uid,
+  });
 
   const handleCreate = () => {
     createLobby(getLobbyModel(user)).then((docRef) => {
-      navigate('Lobby', { lobbyId: docRef.id });
+      navigate("Lobby", { lobbyId: docRef.id });
     });
   };
 
   const handleJoin = (id) => {
-    joinLobby(id, user).then(() => { navigate('Lobby', { lobbyId: id }); });
+    joinLobby(id, user).then(() => {
+      navigate("Lobby", { lobbyId: id });
+    });
   };
-
-  console.log(lobbies);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.lobbyContainer}>
-        <FlatList data={lobbies} renderItem={({ item: { id, host: { name } } }) => <TouchableOpacity onPress={() => handleJoin(id)} key={id} style={styles.lobby}><Text style={styles.lobbyLabel}>{`${name}'s Lobby`}</Text></TouchableOpacity>} />
+        <FlatList
+          data={lobbies}
+          renderItem={({
+            item: {
+              id,
+              host: { name },
+            },
+          }) => (
+            <TouchableOpacity
+              onPress={() => handleJoin(id)}
+              key={id}
+              style={styles.lobby}
+            >
+              <Text style={styles.lobbyLabel}>{`${name}'s Lobby`}</Text>
+            </TouchableOpacity>
+          )}
+        />
       </View>
       <Button onPress={handleCreate} title="Create Lobby" />
     </SafeAreaView>

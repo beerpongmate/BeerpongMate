@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
-import auth from '@react-native-firebase/auth';
+import React, { useContext, useEffect, useState } from "react";
+import auth from "@react-native-firebase/auth";
 
 const UserContext = React.createContext({});
 
@@ -14,7 +14,8 @@ const WithUser = ({ children }) => {
   };
   const signOut = () => auth().signOut();
 
-  const signIn = (username, password) => auth().signInWithEmailAndPassword(username, password);
+  const signIn = (username, password) =>
+    auth().signInWithEmailAndPassword(username, password);
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);

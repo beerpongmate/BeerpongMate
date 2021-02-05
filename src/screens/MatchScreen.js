@@ -1,24 +1,56 @@
-import {
-  SafeAreaView, StyleSheet, View,
-} from 'react-native';
-import React, { useState, useRef, useEffect } from 'react';
-import TableContainer from '../components/TableContainer';
-import MatchEventTypes from '../constants/MatchEventTypes';
-import StatsContainer from '../components/StatsContainer';
+import { SafeAreaView, StyleSheet, View, Text } from "react-native";
+import React, { useState, useRef, useEffect } from "react";
+import TableContainer from "../components/TableContainer";
+import MatchEventTypes from "../constants/MatchEventTypes";
+import StatsContainer from "../components/StatsContainer";
+import { useUser } from "../components/Providers/WithUser";
+import useMatch from "../components/Providers/useMatch";
+import CupContainer from "../components/CupContainer";
+import theme from "../../assets/theme";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   interactionBlock: {
     zIndex: 20,
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
+  },
+  tableContainer: {
+    padding: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: theme.colors.tableInnerBorder,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    backgroundColor: theme.colors.table,
+    flex: 1,
+  },
+  tableBorder: {
+    margin: 15,
+    marginTop: 0,
+    padding: 1,
+    borderRadius: 15,
+    borderWidth: 5,
+    borderColor: theme.colors.tableOuterBorder,
+    borderBottomWidth: 3,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    backgroundColor: theme.colors.tableInnerBorder,
+    flex: 1,
+  },
+  tableSpacer: {
+    alignContent: "flex-end",
+    flex: 1,
+  },
+  fill: {
+    flex: 1,
   },
 });
 
@@ -30,12 +62,12 @@ const initialStats = {
 
 const defaultPlayers = [
   {
-    name: 'Harold',
-    uid: '000',
+    name: "Harold",
+    uid: "000",
   },
   {
-    name: 'Kumar',
-    uid: '001',
+    name: "Kumar",
+    uid: "001",
   },
 ];
 
@@ -45,8 +77,21 @@ const MatchScreen = ({ route }) => {
   const [isAnimating, setAnimating] = useState(false);
   const [playerIndex, setPlayerIndex] = useState(undefined);
   const [round, setRound] = useState(0);
+  const { user } = useUser();
+  const { matchId } = route?.params || {};
+  const { match, addThrow } = useMatch(matchId, user);
+  const [lowerContainerHeight, setLowerContainerHeight] = useState(null);
+  const { players } = match || { players: defaultPlayers };
+  const currentPlayer = match?.data?.playerTurn;
+  const playerTurn = currentPlayer === user.uid;
+  const player = (match?.players || []).find(({ uid }) => uid === user.uid);
+  const team = player?.team;
+  const opponentTeam = team === 0 ? 1 : 0;
+  const opponentThrows = match?.data?.throws[opponentTeam] || [];
+  const opponenLastThrow = opponentThrows.length > 0 ? opponentThrows[opponentThrows.length - 1] : undefined;
+  const opponentCups = opponenLastThrow?.state;
 
-  const { players = defaultPlayers, online = false } = route?.params || {};
+  console.log(match);
 
   useEffect(() => {
     players.forEach(({ uid, ...playerData }) => {
@@ -58,7 +103,7 @@ const MatchScreen = ({ route }) => {
       };
     });
     setPlayerIndex(0);
-  }, []);
+  }, [players]);
 
   const nextPlayer = () => {
     if (playerIndex === players.length - 1) {
@@ -81,17 +126,25 @@ const MatchScreen = ({ route }) => {
     stats.current[playerId].streak = streak;
   };
 
-  const handleHit = (playerId) => {
+  const handleHit = (playerId, event) => {
     setThrowCount(stats.current[playerId].throwCount + 1, playerId);
     setHitCount(stats.current[playerId].hitCount + 1, playerId);
     setStreak(stats.current[playerId].streak + 1, playerId);
-    nextPlayer();
+    if (!matchId) {
+      nextPlayer();
+    } else {
+        addThrow(event);
+    }
   };
 
-  const handleMiss = (playerId) => {
+  const handleMiss = (playerId, event) => {
     setThrowCount(stats.current[playerId].throwCount + 1, playerId);
     setStreak(0, playerId);
-    nextPlayer();
+    if (!matchId) {
+      nextPlayer();
+    } else {
+      addThrow(event)
+    }
   };
 
   const eventMap = {
@@ -100,10 +153,11 @@ const MatchScreen = ({ route }) => {
   };
 
   const handleEvent = (event) => {
+    console.log(event);
     eventArray.current.push(event);
     const eventFunction = eventMap[event?.type];
     if (eventFunction !== undefined) {
-      eventFunction(event?.playerId);
+      eventFunction(event?.playerId, event);
     }
   };
 
@@ -111,18 +165,56 @@ const MatchScreen = ({ route }) => {
     setAnimating(animating);
   };
 
+  const onLowerTableLayout = ({
+    nativeEvent: {
+      layout: { height: layoutHeight },
+    },
+  }) => {
+    setLowerContainerHeight(layoutHeight);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <TableContainer
         handleEvent={handleEvent}
         onAnimation={handleAnimation}
-        currentPlayerId={players[playerIndex]?.uid}
+        currentPlayerId={currentPlayer || players[playerIndex]?.uid}
         skipPlayer={nextPlayer}
         playerCount={players.length}
       />
-      {!online
-      && (<StatsContainer stats={stats.current} playerId={players[playerIndex]?.uid} round={round} />)}
-      {isAnimating && <View style={styles.interactionBlock} />}
+      {matchId ? (
+        <View style={styles.tableBorder}>
+          <View style={styles.tableContainer}>
+            <View style={styles.tableSpacer}>
+              <Text style={styles.playerName}>
+                {(stats.current[currentPlayer] || {}).name}
+              </Text>
+
+              <View
+                style={[styles.row, styles.fill]}
+                onLayout={onLowerTableLayout}
+              >
+                <CupContainer
+                  cupFormation={opponentCups}
+                  style={{ justifyContent: "flex-end" }}
+                  showButtons={false}
+                  reversed
+                  disablePress
+                  onAnimation={handleAnimation}
+                  height={lowerContainerHeight}
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+      ) : (
+        <StatsContainer
+          stats={stats.current}
+          playerId={players[playerIndex]?.uid}
+          round={round}
+        />
+      )}
+      {isAnimating || !playerTurn && <View style={styles.interactionBlock} />}
     </SafeAreaView>
   );
 };

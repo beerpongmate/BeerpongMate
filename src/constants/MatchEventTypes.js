@@ -1,5 +1,5 @@
 export default {
-  HIT: 'HIT',
-  MISS: 'MISS',
-  ORDER: 'ORDER',
+  HIT: "HIT",
+  MISS: "MISS",
+  ORDER: "ORDER",
 };

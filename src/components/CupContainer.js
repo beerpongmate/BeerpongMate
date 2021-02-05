@@ -1,66 +1,64 @@
-import React, { useRef, useState, useEffect } from 'react';
-import {
-  View, StyleSheet, TouchableOpacity, Text,
-} from 'react-native';
-import cloneDeep from 'lodash/cloneDeep';
-import CupRowContainer from './CupRowContainer';
-import MatchEventTypes from '../constants/MatchEventTypes';
+import React, { useRef, useState, useEffect } from "react";
+import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
+import cloneDeep from "lodash/cloneDeep";
+import CupRowContainer from "./CupRowContainer";
+import MatchEventTypes from "../constants/MatchEventTypes";
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   missButton: {
     marginTop: 40,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     borderRadius: 5,
     borderWidth: 3,
-    borderColor: '#fff',
-    borderStyle: 'dashed',
-    alignSelf: 'center',
+    borderColor: "#fff",
+    borderStyle: "dashed",
+    alignSelf: "center",
   },
   buttonLabel: {
-    textDecorationLine: 'underline',
+    // fontFamily: 'Brushstroke-Plain',
+    textDecorationLine: "underline",
     fontSize: 24,
-    color: '#fff',
+    color: "#fff",
     paddingVertical: 10,
     paddingHorizontal: 15,
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
 });
 
 const state10 = {
-  '10-10': { active: true },
-  '10-9': { active: true },
-  '10-8': { active: true },
-  '10-7': { active: true },
-  '10-6': { active: true },
-  '10-5': { active: true },
-  '10-4': { active: true },
-  '10-3': { active: true },
-  '10-2': { active: true },
-  '10-1': { active: true },
+  "10-10": { active: true },
+  "10-9": { active: true },
+  "10-8": { active: true },
+  "10-7": { active: true },
+  "10-6": { active: true },
+  "10-5": { active: true },
+  "10-4": { active: true },
+  "10-3": { active: true },
+  "10-2": { active: true },
+  "10-1": { active: true },
 };
 
 const state6 = {
-  '6-6': { active: true },
-  '6-5': { active: true },
-  '6-4': { active: true },
-  '6-3': { active: true },
-  '6-2': { active: true },
-  '6-1': { active: true },
+  "6-6": { active: true },
+  "6-5": { active: true },
+  "6-4": { active: true },
+  "6-3": { active: true },
+  "6-2": { active: true },
+  "6-1": { active: true },
 };
 
 const state3 = {
-  '3-3': { active: true },
-  '3-2': { active: true },
-  '3-1': { active: true },
+  "3-3": { active: true },
+  "3-2": { active: true },
+  "3-1": { active: true },
 };
 
 const state1 = {
-  '1-1': { active: true },
+  "1-1": { active: true },
 };
 
 const stateMap = {
@@ -70,15 +68,33 @@ const stateMap = {
   1: { state: state1, rows: 1 },
 };
 
-const buildFormation = (state, rowCount) => {
+const buildFormation = (state, rowCount, style) => {
+  console.log(state);
   const rows = [];
   const stateKeys = Object.keys(state);
-  const stateArray = stateKeys.map((key) => ({ id: key, ...state[key] }));
+  const stateArray = stateKeys.map((key) => {
+    const [formation, number] = key.split('-');
+    return { id: key, ...state[key], number }
+  });
+  const orderedStateArray = stateArray.sort((first, second) => {
+    if (first.number < second.number) {
+      return -1;
+    }
+    if (first.number > second.number) {
+      return 1;
+    }
+    return 0; // use lodash
+  });
+  console.log(orderedStateArray);
 
   let lowBound;
   let amount;
-  for (lowBound = 0, amount = rowCount; lowBound < stateArray.length; amount -= 1) {
-    rows.push(stateArray.slice(lowBound, lowBound + amount));
+  for (
+    lowBound = 0, amount = rowCount;
+    lowBound < orderedStateArray.length;
+    amount -= 1
+  ) {
+    rows.push(orderedStateArray.slice(lowBound, lowBound + amount));
     lowBound += amount;
   }
 
@@ -86,95 +102,156 @@ const buildFormation = (state, rowCount) => {
 };
 
 const CupContainer = ({
-  handleEvent, onAnimation, currentPlayerId, skipPlayer, playerCount,
+  handleEvent = () => {},
+  onAnimation,
+  currentPlayerId,
+  skipPlayer,
+  playerCount,
+  showButtons = true,
+  reversed = false,
+  height,
+  disablePress,
+  style,
+  cupFormation = state10
 }) => {
   const [cupSize, setCupSize] = useState(0);
   const cupState = useRef(cloneDeep(stateMap?.[10].state));
-  const containerHeight = useRef(0);
+  const [containerHeight, setContainerHeight] = useState(0);
   const [rows, setRows] = useState(4);
   const [activeCups, setActiveCups] = useState(10);
+  const prefCupFormation = useRef(state10);
+
+  console.log("rerender: ", reversed, activeCups);
 
   useEffect(() => {
     const formationState = stateMap[activeCups];
 
     if (formationState) {
       const { state, rows: formationRows } = formationState;
-      cupState.current = cloneDeep(state);
+      if (!cupFormation) {
+        cupState.current = cloneDeep(state);
+      }
       setRows(formationRows);
-      handleEvent(
-        {
-          type: MatchEventTypes.ORDER,
-          nextRowCount: formationRows,
-          state: cupState.current,
-        },
-      );
+      handleEvent({
+        type: MatchEventTypes.ORDER,
+        nextRowCount: formationRows,
+        state: cupState.current,
+      });
     }
   }, [activeCups]);
 
+  useEffect(() => { 
+    if (Object.values(prefCupFormation).filter(({ active }) => active).length !==
+      Object.values(cupFormation).filter(({ active }) => active).length) {
+      if (cupFormation) {
+        cupState.current = cupFormation;
+        const newActiveCups = Object.values(cupFormation).filter(({ active }) => active).length
+        console.log(newActiveCups);
+        setActiveCups(newActiveCups);
+      }
+    }
+    prefCupFormation.current = cupFormation;
+  }, [cupFormation]);
+
+  useEffect(() => {
+    if (height) {
+      setCupSize(height / 4);
+    }
+  }, [height]);
+
   const handlePress = ({ id }) => {
     cupState.current[id].active = false;
-    handleEvent(
-      {
-        type: MatchEventTypes.HIT,
-        hitId: id,
-        state: cupState.current,
-        playerId: currentPlayerId,
-      },
-    );
-    setActiveCups(activeCups - 1);
+
+    const eventActiveCups = Object.values(cupState.current).filter(({ active }) => active).length
+    
+    console.log(eventActiveCups);
+
+    const formationState = stateMap[eventActiveCups];
+    console.log(formationState);
+
+    if (formationState) {
+      const { state } = formationState;
+
+      if (cupFormation) {
+        cupState.current = cloneDeep(state);
+        console.log(cupState.current);
+      }
+    }
+
+    handleEvent({
+      type: MatchEventTypes.HIT,
+      hitId: id,
+      state: cupState.current,
+      playerId: currentPlayerId,
+    });
+    setActiveCups(eventActiveCups);
   };
 
   const onLayout = ({
     nativeEvent: {
-      layout: {
-        width: layoutWidth,
-      },
+      layout: { width: layoutWidth },
     },
   }) => {
-    setCupSize(layoutWidth / 4);
+    if (!height) {
+      setCupSize(layoutWidth / 4);
+    }
   };
 
   const onCupsLayout = ({
     nativeEvent: {
-      layout: {
-        height: layoutHeight,
-      },
+      layout: { height: layoutHeight },
     },
   }) => {
-    containerHeight.current = layoutHeight;
+    setContainerHeight(layoutHeight);
   };
 
   const formation = buildFormation(cupState.current, rows);
 
+  console.log(formation);
+
+  const sideBasedFormation = reversed ? formation.map( arr => arr.reverse()).reverse() : formation;
+
   return (
     <View onLayout={onLayout} style={[styles.container]}>
-      <View onLayout={onCupsLayout} style={{ minHeight: containerHeight.current, zIndex: 10 }}>
-        {formation.map((row) => <CupRowContainer key={`itemCount${row.length}`} onPress={handlePress} onAnimation={onAnimation} cupSize={cupSize} cupRow={row} />) }
+      <View
+        onLayout={onCupsLayout}
+        style={{
+          minHeight: reversed ? height : containerHeight,
+          zIndex: 10,
+          ...style,
+        }}
+      >
+        {sideBasedFormation.map((row) => (
+          <CupRowContainer
+            key={`itemCount${row.length}`}
+            disablePress={disablePress}
+            onPress={handlePress}
+            onAnimation={onAnimation}
+            cupSize={cupSize}
+            cupRow={row}
+          />
+        ))}
       </View>
-      <View style={styles.row}>
-        {playerCount > 1 && (
-        <TouchableOpacity
-          style={styles.missButton}
-          onPress={skipPlayer}
-        >
-          <Text style={styles.buttonLabel}>SKIP</Text>
-        </TouchableOpacity>
-        )}
-        <TouchableOpacity
-          style={styles.missButton}
-          onPress={
-          () => handleEvent(
-            {
-              type: MatchEventTypes.MISS,
-              state: cupState.current,
-              playerId: currentPlayerId,
-            },
-          )
-        }
-        >
-          <Text style={styles.buttonLabel}>MISS</Text>
-        </TouchableOpacity>
-      </View>
+      {showButtons && (
+        <View style={styles.row}>
+          {playerCount > 1 && (
+            <TouchableOpacity style={styles.missButton} onPress={skipPlayer}>
+              <Text style={styles.buttonLabel}>SKIP</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            style={styles.missButton}
+            onPress={() =>
+              handleEvent({
+                type: MatchEventTypes.MISS,
+                state: cupState.current,
+                playerId: currentPlayerId,
+              })}
+          >
+            <Text style={styles.buttonLabel}>MISS</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
