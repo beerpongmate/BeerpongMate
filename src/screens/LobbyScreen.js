@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { SafeAreaView, FlatList, StyleSheet, Text, Button } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
 import { useUser } from "../components/Providers/WithUser";
@@ -15,15 +15,16 @@ const styles = StyleSheet.create({
 });
 
 const LobbyScreen = ({ route }) => {
-  const { navigate, goBack } = useNavigation();
+  const { navigate, goBack, dispatch } = useNavigation();
   const { lobbyId } = route.params;
   const { user } = useUser();
-  const { lobby, readyUp, startMatch } = useLobby({
+  const { lobby, readyUp, startMatch, deleteLobby } = useLobby({
     lobbyId,
     userId: user.uid,
   });
   const { createMatch } = useMatch();
   const lobbyIsLoaded = useRef(false);
+  const hasJoinedMatch = useRef(false);
 
   const players = Object.keys(lobby?.players || {}).map((id) => ({
     uid: id,
@@ -56,7 +57,10 @@ const LobbyScreen = ({ route }) => {
     }
 
     if (lobby?.matchId) {
-      navigate("Match", { matchId: lobby.matchId });
+      if (!hasJoinedMatch.current) {
+        navigate("Match", { matchId: lobby.matchId });
+        hasJoinedMatch.current = true;
+      }
     }
   }, [lobby]);
 
@@ -64,11 +68,13 @@ const LobbyScreen = ({ route }) => {
     <SafeAreaView style={styles.container}>
       <FlatList
         data={players}
+        keyExtractor={({ uid }) => uid}
         renderItem={({ item: { name, ready } }) => (
           <Text>{`${name} - ${ready ? "Ready" : "Not Ready"}`}</Text>
         )}
       />
       <Button onPress={readyUp} title="Ready" />
+      {isHost && <Button onPress={deleteLobby} title="Delete Lobby" />}
       {isHost && allReady && (
         <Button onPress={handleStartMatch} title="Start Match" />
       )}

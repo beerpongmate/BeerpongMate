@@ -49,7 +49,9 @@ const OnlineScreen = () => {
     });
   };
 
-  const handleJoin = (id) => {
+  const handleJoin = ({ id, matchId, players }) => {
+    console.log(matchId);
+    console.log(players);
     joinLobby(id, user).then(() => {
       navigate("Lobby", { lobbyId: id });
     });
@@ -64,10 +66,12 @@ const OnlineScreen = () => {
             item: {
               id,
               host: { name },
+              matchId,
+              players
             },
           }) => (
             <TouchableOpacity
-              onPress={() => handleJoin(id)}
+              onPress={() => handleJoin({id, matchId, players})}
               key={id}
               style={styles.lobby}
             >

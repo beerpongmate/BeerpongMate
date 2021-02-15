@@ -68,8 +68,7 @@ const stateMap = {
   1: { state: state1, rows: 1 },
 };
 
-const buildFormation = (state, rowCount, style) => {
-  console.log(state);
+const buildFormation = (state, rowCount) => {
   const rows = [];
   const stateKeys = Object.keys(state);
   const stateArray = stateKeys.map((key) => {
@@ -85,7 +84,6 @@ const buildFormation = (state, rowCount, style) => {
     }
     return 0; // use lodash
   });
-  console.log(orderedStateArray);
 
   let lowBound;
   let amount;
@@ -112,24 +110,22 @@ const CupContainer = ({
   height,
   disablePress,
   style,
-  cupFormation = state10
+  matchId,
+  cupFormation
 }) => {
   const [cupSize, setCupSize] = useState(0);
   const cupState = useRef(cloneDeep(stateMap?.[10].state));
   const [containerHeight, setContainerHeight] = useState(0);
   const [rows, setRows] = useState(4);
   const [activeCups, setActiveCups] = useState(10);
-  const prefCupFormation = useRef(state10);
-
-  console.log("rerender: ", reversed, activeCups);
 
   useEffect(() => {
-    const formationState = stateMap[activeCups];
+    const formationState = cloneDeep(stateMap[activeCups]);
 
     if (formationState) {
       const { state, rows: formationRows } = formationState;
       if (!cupFormation) {
-        cupState.current = cloneDeep(state);
+        cupState.current = state;
       }
       setRows(formationRows);
       handleEvent({
@@ -141,16 +137,11 @@ const CupContainer = ({
   }, [activeCups]);
 
   useEffect(() => { 
-    if (Object.values(prefCupFormation).filter(({ active }) => active).length !==
-      Object.values(cupFormation).filter(({ active }) => active).length) {
-      if (cupFormation) {
-        cupState.current = cupFormation;
+    if (cupFormation) {
+        cupState.current = cloneDeep(cupFormation);
         const newActiveCups = Object.values(cupFormation).filter(({ active }) => active).length
-        console.log(newActiveCups);
         setActiveCups(newActiveCups);
-      }
     }
-    prefCupFormation.current = cupFormation;
   }, [cupFormation]);
 
   useEffect(() => {
@@ -164,18 +155,12 @@ const CupContainer = ({
 
     const eventActiveCups = Object.values(cupState.current).filter(({ active }) => active).length
     
-    console.log(eventActiveCups);
-
-    const formationState = stateMap[eventActiveCups];
-    console.log(formationState);
+    const formationState = cloneDeep(stateMap[eventActiveCups]);
 
     if (formationState) {
       const { state } = formationState;
 
-      if (cupFormation) {
-        cupState.current = cloneDeep(state);
-        console.log(cupState.current);
-      }
+      cupState.current = state;
     }
 
     handleEvent({
@@ -207,8 +192,6 @@ const CupContainer = ({
 
   const formation = buildFormation(cupState.current, rows);
 
-  console.log(formation);
-
   const sideBasedFormation = reversed ? formation.map( arr => arr.reverse()).reverse() : formation;
 
   return (
@@ -234,7 +217,7 @@ const CupContainer = ({
       </View>
       {showButtons && (
         <View style={styles.row}>
-          {playerCount > 1 && (
+          {(playerCount > 1 && !matchId) && (
             <TouchableOpacity style={styles.missButton} onPress={skipPlayer}>
               <Text style={styles.buttonLabel}>SKIP</Text>
             </TouchableOpacity>

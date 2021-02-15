@@ -1,5 +1,5 @@
 import firestore from "@react-native-firebase/firestore";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
 const useLobby = ({ lobbyId, userId }) => {
@@ -7,6 +7,8 @@ const useLobby = ({ lobbyId, userId }) => {
   const [lobbies, setLobbies] = useState([]);
   const [lobby, setLobby] = useState(null);
   const lobbyRef = useRef(null);
+
+  const deleteLobby = () => firestore().collection("Lobbies").doc(lobbyId).delete();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -41,20 +43,20 @@ const useLobby = ({ lobbyId, userId }) => {
       // Stop listening for updates when no longer required
       return () => {
         subscriber.current();
-        if (lobbyId) {
-          if (lobbyRef.current?.host?.uid === userId) {
-            firestore().collection("Lobbies").doc(lobbyId).delete();
-          } else {
+      };
+    }, [lobbyId, userId])
+  );
+
+  // leave lobby on unmount
+  useEffect(() => () => { if (lobbyId) {
+          if (lobbyRef.current?.host?.uid !== userId) {
             firestore()
               .collection("Lobbies")
               .doc(lobbyId)
               .update({ [`players.${userId}`]: firestore.FieldValue.delete() })
               .catch(() => {});
           }
-        }
-      };
-    }, [lobbyId, userId])
-  );
+        }} , [])
 
   const createLobby = (data) => firestore().collection("Lobbies").add(data);
 
@@ -66,7 +68,7 @@ const useLobby = ({ lobbyId, userId }) => {
 
   const startMatch = (id) =>
     firestore().collection("Lobbies").doc(lobbyId).update({ matchId: id });
-
+  
   const readyUp = () =>
     firestore()
       .collection("Lobbies")
@@ -80,6 +82,7 @@ const useLobby = ({ lobbyId, userId }) => {
     joinLobby,
     readyUp,
     startMatch,
+    deleteLobby
   };
 };
 

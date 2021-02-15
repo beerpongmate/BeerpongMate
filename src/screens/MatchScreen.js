@@ -86,12 +86,16 @@ const MatchScreen = ({ route }) => {
   const playerTurn = currentPlayer === user.uid;
   const player = (match?.players || []).find(({ uid }) => uid === user.uid);
   const team = player?.team;
+  const throws = match?.data?.throws[team] || [];
+  const lastThrow = throws.length > 0 ? throws[throws.length - 1] : undefined;
+  const cups = lastThrow?.state;
   const opponentTeam = team === 0 ? 1 : 0;
   const opponentThrows = match?.data?.throws[opponentTeam] || [];
   const opponenLastThrow = opponentThrows.length > 0 ? opponentThrows[opponentThrows.length - 1] : undefined;
   const opponentCups = opponenLastThrow?.state;
 
   console.log(match);
+  console.log(matchId);
 
   useEffect(() => {
     players.forEach(({ uid, ...playerData }) => {
@@ -153,7 +157,6 @@ const MatchScreen = ({ route }) => {
   };
 
   const handleEvent = (event) => {
-    console.log(event);
     eventArray.current.push(event);
     const eventFunction = eventMap[event?.type];
     if (eventFunction !== undefined) {
@@ -181,6 +184,8 @@ const MatchScreen = ({ route }) => {
         currentPlayerId={currentPlayer || players[playerIndex]?.uid}
         skipPlayer={nextPlayer}
         playerCount={players.length}
+        matchId={matchId}
+        cupFormation={cups}
       />
       {matchId ? (
         <View style={styles.tableBorder}>
@@ -214,7 +219,7 @@ const MatchScreen = ({ route }) => {
           round={round}
         />
       )}
-      {isAnimating || !playerTurn && <View style={styles.interactionBlock} />}
+      {(isAnimating || (!playerTurn && matchId )) && <View style={styles.interactionBlock} />}
     </SafeAreaView>
   );
 };

@@ -37,13 +37,9 @@ const useMatch = (matchId, user) => {
   };
 
   const addThrow = (data) => {
-    console.log(match);
     const { data: matchData, players} = matchDataRef.current || {};
     const { order, throws } = matchData || {};
-    console.log(players);
-    console.log(user);
     const player = players.find(({ uid }) => uid === user.uid)
-    console.log(player);
     const { team } = player || {};
     throws[team] = [...throws[team], data];
     return matchRef.current.update({
