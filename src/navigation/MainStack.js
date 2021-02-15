@@ -1,10 +1,10 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import MatchScreen from '../screens/MatchScreen';
-import WelcomeScreen from '../screens/WelcomeScreen';
-import SignInScreen from '../screens/SignInScreen';
-import OnlineScreen from '../screens/OnlineScreen';
-import LobbyScreen from '../screens/LobbyScreen';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import MatchScreen from "../screens/MatchScreen";
+import WelcomeScreen from "../screens/WelcomeScreen";
+import SignInScreen from "../screens/SignInScreen";
+import OnlineScreen from "../screens/OnlineScreen";
+import LobbyScreen from "../screens/LobbyScreen";
 
 const Stack = createStackNavigator();
 

@@ -1,13 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
-import {
-  TouchableWithoutFeedback, View, Image, Animated,
-} from 'react-native';
+import React, { useState, useRef, useEffect } from "react";
+import { TouchableWithoutFeedback, View, Image, Animated } from "react-native";
 
-const cupImage = require('../../assets/images/Cup.png');
+const cupImage = require("../../assets/images/Cup.png");
 
-const Cup = ({
-  cupSize, onPress, data, onAnimation,
-}) => {
+const Cup = ({ cupSize, onPress, data, onAnimation, disablePress }) => {
   const translateY = useRef(new Animated.Value(800)).current;
   const scale = useRef(new Animated.Value(1)).current;
   const [ballVisible, setBallVisible] = useState(false);
@@ -35,7 +31,10 @@ const Cup = ({
       ]),
     ]).start(({ finished }) => {
       if (finished) {
-        setTimeout(() => { onPress(data); onAnimation(false); }, 200);
+        setTimeout(() => {
+          onPress(data);
+          onAnimation(false);
+        }, 200);
       }
     });
   };
@@ -50,31 +49,32 @@ const Cup = ({
         width: cupSize,
         height: cupSize,
         borderRadius: cupSize / 2,
-        alignContent: 'center',
-        justifyContent: 'center',
+        alignContent: "center",
+        justifyContent: "center",
       }}
-      onPress={animateClose}
+      onPress={disablePress ? undefined : animateClose}
     >
       <View>
         <Image style={{ height: cupSize, width: cupSize }} source={cupImage} />
         {ballVisible && (
-        <Animated.View style={[{
-          height: cupSize / 2,
-          width: cupSize / 2,
-          backgroundColor: '#fff',
-          borderWidth: 1,
-          borderColor: 'grey',
-          position: 'absolute',
-          borderRadius: cupSize / 4,
-          left: cupSize / 4,
-          zIndex: 99,
-        }, {
-          transform: [
-            { translateY },
-            { scale },
-          ],
-        }]}
-        />
+          <Animated.View
+            style={[
+              {
+                height: cupSize / 2,
+                width: cupSize / 2,
+                backgroundColor: "#fff",
+                borderWidth: 1,
+                borderColor: "grey",
+                position: "absolute",
+                borderRadius: cupSize / 4,
+                left: cupSize / 4,
+                zIndex: 99,
+              },
+              {
+                transform: [{ translateY }, { scale }],
+              },
+            ]}
+          />
         )}
       </View>
     </TouchableWithoutFeedback>

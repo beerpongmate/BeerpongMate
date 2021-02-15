@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import {
-  View, Button, Text, StyleSheet,
-} from 'react-native';
+import React, { useState } from "react";
+import { View, Button, Text, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   counter: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 

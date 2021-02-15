@@ -1,9 +1,7 @@
-import React from 'react';
-import {
-  View, StyleSheet,
-} from 'react-native';
-import CupContainer from './CupContainer';
-import theme from '../../assets/theme';
+import React from "react";
+import { View, StyleSheet } from "react-native";
+import CupContainer from "./CupContainer";
+import theme from "../../assets/theme";
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +28,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const TableContainer = ({ handleEvent, onAnimation, currentPlayerId, skipPlayer, playerCount }) => (
+const TableContainer = ({
+  handleEvent,
+  onAnimation,
+  currentPlayerId,
+  skipPlayer,
+  playerCount,
+  matchId,
+  cupFormation
+}) => (
   <View style={styles.tableBorder}>
     <View style={styles.container}>
       <CupContainer
@@ -39,6 +45,8 @@ const TableContainer = ({ handleEvent, onAnimation, currentPlayerId, skipPlayer,
         currentPlayerId={currentPlayerId}
         skipPlayer={skipPlayer}
         playerCount={playerCount}
+        matchId={matchId}
+        cupFormation={cupFormation}
       />
     </View>
   </View>
