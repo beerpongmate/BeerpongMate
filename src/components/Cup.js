@@ -3,7 +3,7 @@ import { TouchableWithoutFeedback, View, Image, Animated } from "react-native";
 
 const cupImage = require("../../assets/images/Cup.png");
 
-const Cup = ({ cupSize, onPress, data, onAnimation, disablePress }) => {
+const Cup = ({ cupSize = 0, onPress, data, onAnimation, disablePress }) => {
   const translateY = useRef(new Animated.Value(800)).current;
   const scale = useRef(new Animated.Value(1)).current;
   const [ballVisible, setBallVisible] = useState(false);

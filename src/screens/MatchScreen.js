@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View, Text } from "react-native";
+import { SafeAreaView, StyleSheet, View, Text, Platform} from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import TableContainer from "../components/TableContainer";
 import MatchEventTypes from "../constants/MatchEventTypes";
@@ -52,13 +52,12 @@ const styles = StyleSheet.create({
   fill: {
     flex: 1,
   },
+  playerName: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 18
+  }
 });
-
-const initialStats = {
-  hitCount: 0,
-  throwCount: 0,
-  streak: 0,
-};
 
 const defaultPlayers = [
   {
@@ -74,6 +73,7 @@ const defaultPlayers = [
 const MatchScreen = ({ route }) => {
   const eventArray = useRef([]);
   const stats = useRef({});
+  const upperTableIsRendered = useRef(false);
   const [isAnimating, setAnimating] = useState(false);
   const [playerIndex, setPlayerIndex] = useState(undefined);
   const [round, setRound] = useState(0);
@@ -82,8 +82,9 @@ const MatchScreen = ({ route }) => {
   const { match, addThrow } = useMatch(matchId, user);
   const [lowerContainerHeight, setLowerContainerHeight] = useState(null);
   const { players } = match || { players: defaultPlayers };
-  const currentPlayer = match?.data?.playerTurn;
-  const playerTurn = currentPlayer === user.uid;
+  const currentPlayerId = match?.data?.playerTurn;
+  const currentPlayer = (match?.players || []).find(({ uid }) => uid === currentPlayerId)
+  const playerTurn = currentPlayerId === user.uid;
   const player = (match?.players || []).find(({ uid }) => uid === user.uid);
   const team = player?.team;
   const throws = match?.data?.throws[team] || [];
@@ -93,10 +94,7 @@ const MatchScreen = ({ route }) => {
   const opponentThrows = match?.data?.throws[opponentTeam] || [];
   const opponenLastThrow = opponentThrows.length > 0 ? opponentThrows[opponentThrows.length - 1] : undefined;
   const opponentCups = opponenLastThrow?.state;
-
-  console.log(match);
-  console.log(matchId);
-
+    
   useEffect(() => {
     players.forEach(({ uid, ...playerData }) => {
       stats.current[uid] = {
@@ -173,7 +171,15 @@ const MatchScreen = ({ route }) => {
       layout: { height: layoutHeight },
     },
   }) => {
-    setLowerContainerHeight(layoutHeight);
+    if (Platform.OS === 'ios' || upperTableIsRendered.current) {
+      setLowerContainerHeight(layoutHeight);
+    }
+  };
+
+  const onUpperTableLayout = (height) => {
+    if (height) {
+      upperTableIsRendered.current = true;
+    }
   };
 
   return (
@@ -181,22 +187,23 @@ const MatchScreen = ({ route }) => {
       <TableContainer
         handleEvent={handleEvent}
         onAnimation={handleAnimation}
-        currentPlayerId={currentPlayer || players[playerIndex]?.uid}
+        currentPlayerId={currentPlayerId || players[playerIndex]?.uid}
         skipPlayer={nextPlayer}
         playerCount={players.length}
         matchId={matchId}
         cupFormation={cups}
+        onCupContainerLayout={onUpperTableLayout}
       />
       {matchId ? (
         <View style={styles.tableBorder}>
           <View style={styles.tableContainer}>
             <View style={styles.tableSpacer}>
               <Text style={styles.playerName}>
-                {(stats.current[currentPlayer] || {}).name}
+                {(currentPlayer || { name: "Waiting for Players"}).name}
               </Text>
 
               <View
-                style={[styles.row, styles.fill]}
+                style={styles.fill}
                 onLayout={onLowerTableLayout}
               >
                 <CupContainer

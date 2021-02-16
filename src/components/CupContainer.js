@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 3,
     borderColor: "#fff",
-    borderStyle: "dashed",
+    borderStyle: "solid",
     alignSelf: "center",
   },
   buttonLabel: {
@@ -111,13 +111,20 @@ const CupContainer = ({
   disablePress,
   style,
   matchId,
-  cupFormation
+  cupFormation,
+  onCupContainerLayout = () => {}
 }) => {
   const [cupSize, setCupSize] = useState(0);
   const cupState = useRef(cloneDeep(stateMap?.[10].state));
   const [containerHeight, setContainerHeight] = useState(0);
   const [rows, setRows] = useState(4);
   const [activeCups, setActiveCups] = useState(10);
+
+  if (reversed) {
+    console.log("height", height);
+    console.log("containerHeight", containerHeight);
+    console.log("cupSize", cupSize);
+  }
 
   useEffect(() => {
     const formationState = cloneDeep(stateMap[activeCups]);
@@ -177,7 +184,7 @@ const CupContainer = ({
       layout: { width: layoutWidth },
     },
   }) => {
-    if (!height) {
+    if (!height && !reversed) {
       setCupSize(layoutWidth / 4);
     }
   };
@@ -188,7 +195,19 @@ const CupContainer = ({
     },
   }) => {
     setContainerHeight(layoutHeight);
+    onCupContainerLayout(layoutHeight);
   };
+
+  const renderCups = (formation) => formation.map((row) => (
+    <CupRowContainer
+      key={`itemCount${row.length}`}
+      disablePress={disablePress}
+      onPress={handlePress}
+      onAnimation={onAnimation}
+      cupSize={cupSize}
+      cupRow={row}
+    />
+  ));
 
   const formation = buildFormation(cupState.current, rows);
 
@@ -204,16 +223,7 @@ const CupContainer = ({
           ...style,
         }}
       >
-        {sideBasedFormation.map((row) => (
-          <CupRowContainer
-            key={`itemCount${row.length}`}
-            disablePress={disablePress}
-            onPress={handlePress}
-            onAnimation={onAnimation}
-            cupSize={cupSize}
-            cupRow={row}
-          />
-        ))}
+        {renderCups(sideBasedFormation)}
       </View>
       {showButtons && (
         <View style={styles.row}>
