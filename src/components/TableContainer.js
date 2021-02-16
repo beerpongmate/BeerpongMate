@@ -35,7 +35,8 @@ const TableContainer = ({
   skipPlayer,
   playerCount,
   matchId,
-  cupFormation
+  cupFormation,
+  ...props
 }) => (
   <View style={styles.tableBorder}>
     <View style={styles.container}>
@@ -47,6 +48,7 @@ const TableContainer = ({
         playerCount={playerCount}
         matchId={matchId}
         cupFormation={cupFormation}
+        {...props}
       />
     </View>
   </View>

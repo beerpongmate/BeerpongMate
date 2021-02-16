@@ -24,18 +24,20 @@ const WelcomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.helloWorld}>{user ? user.email : "Guest"}</Text>
+      <Text style={styles.helloWorld}>{user ? user.displayName : "Guest"}</Text>
       <Button
         onPress={() =>
-          navigate("Match", { players: [getUserMatchModel(user)] })
-        }
+          navigate("Match", { players: [getUserMatchModel(user)] })}
         title="Offline Match"
       />
       {user && (
         <Button onPress={() => navigate("Online")} title="Online Match" />
       )}
       {!user ? (
-        <Button onPress={() => navigate("SignIn")} title="Sign In" />
+        <>
+          <Button onPress={() => navigate("SignIn")} title="Sign In" />
+          <Button onPress={() => navigate("SignUp")} title="Sign Up" />
+        </>
       ) : (
         <Button onPress={signOut} title="Sign Out" />
       )}

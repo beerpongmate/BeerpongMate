@@ -1,10 +1,10 @@
 const getLobbyModel = (user) => ({
   host: {
     uid: user?.uid,
-    name: user?.email,
+    name: user?.displayName,
   },
   players: {
-    [user.uid]: { ready: false, name: user.email },
+    [user.uid]: { ready: false, name: user.displayName },
   },
 });
 

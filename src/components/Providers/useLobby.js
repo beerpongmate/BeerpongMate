@@ -64,7 +64,7 @@ const useLobby = ({ lobbyId, userId }) => {
     firestore()
       .collection("Lobbies")
       .doc(id)
-      .update({ [`players.${user.uid}`]: { name: user.email, ready: false } });
+      .update({ [`players.${user.uid}`]: { name: user.displayName, ready: false } });
 
   const startMatch = (id) =>
     firestore().collection("Lobbies").doc(lobbyId).update({ matchId: id });

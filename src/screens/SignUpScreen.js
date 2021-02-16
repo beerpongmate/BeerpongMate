@@ -48,18 +48,23 @@ const styles = StyleSheet.create({
 });
 
 const SignInScreen = () => {
-  const [username, setUsername] = useState(null);
+  const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [username, setName] = useState(null);
 
   const navigate = useNavigation();
-  const { signIn } = useUser();
+  const { signUp, setUsername } = useUser();
 
-  const handleSignIn = () => {
-    signIn(username, password)
-      .then(() => {
-        navigate.goBack();
-      })
-      .catch(() => {});
+  const handleSignUp = () => {
+    if (username) {
+      signUp(email, password)
+        .then(() => {
+          setUsername(username).then(() => {
+            navigate.goBack();
+           }).catch(() => { });
+        })
+        .catch(() => { });
+    }
   };
 
   return (
@@ -69,7 +74,7 @@ const SignInScreen = () => {
           style={styles.inputfield}
           placeholder="eMail"
           keyboardType="email-address"
-          onChangeText={setUsername}
+          onChangeText={setEmail}
         />
         <TextInput
           style={styles.inputfield}
@@ -77,9 +82,14 @@ const SignInScreen = () => {
           secureTextEntry
           onChangeText={setPassword}
         />
+        <TextInput
+          style={styles.inputfield}
+          placeholder="What shall we call you?"
+          onChangeText={setName}
+        />
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonLabel}>SIGN IN</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonLabel}>SIGN UP</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
