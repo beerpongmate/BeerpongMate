@@ -7,6 +7,7 @@ import { useUser } from "../components/Providers/WithUser";
 import useMatch from "../components/Providers/useMatch";
 import CupContainer from "../components/CupContainer";
 import theme from "../../assets/theme";
+import WinnerOverlay from "../components/WinnerOverlay";
 
 const styles = StyleSheet.create({
   container: {
@@ -94,6 +95,7 @@ const MatchScreen = ({ route }) => {
   const opponentThrows = match?.data?.throws[opponentTeam] || [];
   const opponenLastThrow = opponentThrows.length > 0 ? opponentThrows[opponentThrows.length - 1] : undefined;
   const opponentCups = opponenLastThrow?.state;
+  const winningTeam = match?.winningTeam;
     
   useEffect(() => {
     players.forEach(({ uid, ...playerData }) => {
@@ -193,6 +195,7 @@ const MatchScreen = ({ route }) => {
         matchId={matchId}
         cupFormation={cups}
         onCupContainerLayout={onUpperTableLayout}
+        disablePress={winningTeam !== undefined || isAnimating || (!playerTurn && matchId)}
       />
       {matchId ? (
         <View style={styles.tableBorder}>
@@ -226,7 +229,8 @@ const MatchScreen = ({ route }) => {
           round={round}
         />
       )}
-      {(isAnimating || (!playerTurn && matchId )) && <View style={styles.interactionBlock} />}
+      {(isAnimating || (!playerTurn && matchId)) && <View style={styles.interactionBlock} />}
+      {winningTeam !== undefined && <WinnerOverlay winningTeam={winningTeam} players={players} />}
     </SafeAreaView>
   );
 };
