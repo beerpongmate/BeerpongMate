@@ -8,6 +8,27 @@ const useMatch = (matchId, user) => {
   const matchDataRef = useRef(null);
   const matchRef = useRef(null);
 
+  const { winningTeam } = match || {};
+
+  const setWinningTeam = (team) => matchRef.current.update({
+      winningTeam: team
+    });
+
+  if (winningTeam === undefined) {
+    const team0Throws = match?.data?.throws[0] || [];
+    const team0WinIndex = team0Throws.findIndex(({ hitId }) => hitId === '1-1');
+    const team1Throws = match?.data?.throws[1] || [];
+    const team1WinIndex = team1Throws.findIndex(({ hitId }) => hitId === '1-1');
+
+    if (team1WinIndex > 0 && team1WinIndex > 0 && team0WinIndex === team1WinIndex) {
+      setWinningTeam(-1);
+    } else if (team1WinIndex > 0 && team1WinIndex <= team0Throws.length - 1) {
+      setWinningTeam(1);
+    } else if (team0WinIndex > 0 && team0WinIndex <= team1Throws.length-1) {
+      setWinningTeam(0);
+    }
+  }
+
   useFocusEffect(
     React.useCallback(() => {
       if (matchId) {

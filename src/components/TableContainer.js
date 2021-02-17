@@ -39,7 +39,7 @@ const TableContainer = ({
   ...props
 }) => (
   <View style={styles.tableBorder}>
-    <View style={styles.container}>
+    <View style={styles.container}>   
       <CupContainer
         handleEvent={handleEvent}
         onAnimation={onAnimation}
@@ -52,6 +52,6 @@ const TableContainer = ({
       />
     </View>
   </View>
-);
+  );
 
 export default TableContainer;
