@@ -85,7 +85,7 @@ const MatchScreen = ({ route }) => {
   const { players } = match || { players: defaultPlayers };
   const currentPlayerId = match?.data?.playerTurn;
   const currentPlayer = (match?.players || []).find(({ uid }) => uid === currentPlayerId)
-  const playerTurn = currentPlayerId === user.uid;
+  const playerTurn = currentPlayerId === user?.uid;
   const player = (match?.players || []).find(({ uid }) => uid === user.uid);
   const team = player?.team;
   const throws = match?.data?.throws[team] || [];

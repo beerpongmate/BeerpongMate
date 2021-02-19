@@ -20,8 +20,6 @@ const WelcomeScreen = () => {
 
   const { user, signOut } = useUser();
 
-  console.log(user);
-
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.helloWorld}>{user ? user.displayName : "Guest"}</Text>
