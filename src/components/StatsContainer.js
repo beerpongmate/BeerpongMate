@@ -57,6 +57,8 @@ const styles = StyleSheet.create({
 const StatsContainer = ({ stats = {}, playerId }) => {
   const { name, throwCount, hitCount, streak } = stats[playerId] || {};
 
+  const hitRatio = (hitCount / throwCount).toFixed(2);
+
   return (
     <View style={styles.tableBorder}>
       <View style={styles.table}>
@@ -71,6 +73,7 @@ const StatsContainer = ({ stats = {}, playerId }) => {
             </View>
             <View style={styles.row}>
               <StatItem stat={streak} iconName="fire" label="Streak" />
+              <StatItem stat={hitRatio} iconName="arm-flex" label="Hit Ratio" />
             </View>
           </View>
         </ScrollView>
