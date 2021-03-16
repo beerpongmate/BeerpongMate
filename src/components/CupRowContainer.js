@@ -15,6 +15,7 @@ const CupRowContainer = ({
   onPress,
   onAnimation,
   disablePress,
+  resetPending
 }) => (
   <View
     style={[
@@ -30,6 +31,7 @@ const CupRowContainer = ({
         key={data?.id}
         data={data}
         disablePress={disablePress}
+        resetPending={resetPending}
       />
     ))}
   </View>
