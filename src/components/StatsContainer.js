@@ -57,7 +57,11 @@ const styles = StyleSheet.create({
 const StatsContainer = ({ stats = {}, playerId }) => {
   const { name, throwCount, hitCount, streak } = stats[playerId] || {};
 
+  console.log((hitCount / throwCount).toFixed(2));
+  console.log((hitCount / throwCount).toFixed(2) === 'NaN');
   const hitRatio = (hitCount / throwCount).toFixed(2);
+
+  const hitRatioDisplay = hitRatio === 'NaN' ? 0 : hitRatio;
 
   return (
     <View style={styles.tableBorder}>
@@ -73,7 +77,7 @@ const StatsContainer = ({ stats = {}, playerId }) => {
             </View>
             <View style={styles.row}>
               <StatItem stat={streak} iconName="fire" label="Streak" />
-              <StatItem stat={hitRatio} iconName="arm-flex" label="Hit Ratio" />
+              <StatItem stat={hitRatioDisplay} iconName="arm-flex" label="Hit Ratio" />
             </View>
           </View>
         </ScrollView>
