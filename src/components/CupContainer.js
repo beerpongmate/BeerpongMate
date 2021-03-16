@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import cloneDeep from "lodash/cloneDeep";
 import CupRowContainer from "./CupRowContainer";
 import MatchEventTypes from "../constants/MatchEventTypes";
+import theme from "../../assets/theme";
 
 const styles = StyleSheet.create({
   container: {},
@@ -14,6 +15,32 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     borderStyle: "solid",
     alignSelf: "center",
+  },
+  undoButton: {
+    marginTop: 40,
+    backgroundColor: "black",
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: theme.colors.tableOuterBorder,
+    borderStyle: "solid",
+    alignSelf: "center",
+  },
+  confirmButton: {
+    marginTop: 40,
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    borderWidth: 3,
+    borderColor: theme.colors.tableOuterBorder,
+    borderStyle: "solid",
+    alignSelf: "center",
+  },
+  confirmLabel: {
+    // fontFamily: 'Brushstroke-Plain',
+    textDecorationLine: "underline",
+    fontSize: 24,
+    color: theme.colors.table,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
   },
   buttonLabel: {
     // fontFamily: 'Brushstroke-Plain',
@@ -119,12 +146,9 @@ const CupContainer = ({
   const [containerHeight, setContainerHeight] = useState(0);
   const [rows, setRows] = useState(4);
   const [activeCups, setActiveCups] = useState(10);
-
-  if (reversed) {
-    console.log("height", height);
-    console.log("containerHeight", containerHeight);
-    console.log("cupSize", cupSize);
-  }
+  const [displayConfirm, setDisplayConfirm] = useState(false);
+  const pendingCup = useRef(null);
+  const [pendingReset, setPendingReset] = useState(false);
 
   useEffect(() => {
     const formationState = cloneDeep(stateMap[activeCups]);
@@ -157,7 +181,20 @@ const CupContainer = ({
     }
   }, [height]);
 
+  const handleConfirm = (cupData) => { 
+    setDisplayConfirm(true);
+    pendingCup.current = cupData;
+  }
+
+  const handleUndo = () => { 
+    setPendingReset(!pendingReset);
+    setDisplayConfirm(false);
+    pendingCup.current = null;
+  }
+
   const handlePress = ({ id }) => {
+    pendingCup.current = null;
+    setDisplayConfirm(false);
     cupState.current[id].active = false;
 
     const eventActiveCups = Object.values(cupState.current).filter(({ active }) => active).length
@@ -201,18 +238,19 @@ const CupContainer = ({
   const renderCups = (formation) => formation.map((row) => (
     <CupRowContainer
       key={`itemCount${row.length}`}
-      disablePress={disablePress}
-      onPress={handlePress}
+      disablePress={disablePress || pendingCup.current !== null}
+      onPress={handleConfirm}
       onAnimation={onAnimation}
       cupSize={cupSize}
       cupRow={row}
+      resetPending={pendingReset}
     />
   ));
 
   const formation = buildFormation(cupState.current, rows);
 
-  const sideBasedFormation = reversed ? formation.map( arr => arr.reverse()).reverse() : formation;
-
+  const sideBasedFormation = reversed ? formation.map(arr => arr.reverse()).reverse() : formation;
+  
   return (
     <View onLayout={onLayout} style={[styles.container]}>
       <View
@@ -225,7 +263,20 @@ const CupContainer = ({
       >
         {renderCups(sideBasedFormation)}
       </View>
-      {showButtons && (
+      {displayConfirm && (
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.undoButton} onPress={handleUndo}>
+          <Text style={styles.confirmLabel}>UNDO</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.confirmButton}
+          onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }}
+        >
+          <Text style={styles.confirmLabel}>HIT!</Text>
+        </TouchableOpacity>
+      </View>
+      )}
+      {showButtons && !displayConfirm && (
         <View style={styles.row}>
           {(playerCount > 1 && !matchId) && (
             <TouchableOpacity style={styles.missButton} onPress={skipPlayer}>
