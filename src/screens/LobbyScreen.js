@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from "react";
-import { SafeAreaView, FlatList, StyleSheet, Text, Button } from "react-native";
+import { SafeAreaView, FlatList, StyleSheet, Text, Button, View, TouchableOpacity } from "react-native";
 import { StackActions, useNavigation } from "@react-navigation/native";
+import Clipboard from '@react-native-clipboard/clipboard';
 import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
 import { useUser } from "../components/Providers/WithUser";
+
 
 const styles = StyleSheet.create({
   container: {
@@ -64,15 +66,25 @@ const LobbyScreen = ({ route }) => {
     }
   }, [lobby]);
 
+  const copyToClipboard = () => {
+    Clipboard.setString(lobby?.channel?.invite);
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        style={{ flex: 1 }}
         data={players}
         keyExtractor={({ uid }) => uid}
         renderItem={({ item: { name, ready } }) => (
           <Text>{`${name} - ${ready ? "Ready" : "Not Ready"}`}</Text>
         )}
       />
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity onPress={copyToClipboard}>
+          <Text>{lobby?.channel?.invite}</Text>
+        </TouchableOpacity>
+      </View>
       <Button onPress={readyUp} title="Ready" />
       {isHost && <Button onPress={deleteLobby} title="Delete Lobby" />}
       {isHost && allReady && (
