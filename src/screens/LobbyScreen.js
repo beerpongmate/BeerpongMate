@@ -5,13 +5,17 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
 import { useUser } from "../components/Providers/WithUser";
+import TeamsList from "../components/TeamsList";
 
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1
+  },
+  outerContainer: {
     flex: 1,
     backgroundColor: "#fff",
-    margin: 20,
+    padding: 20,
   },
   lobbyContainer: {},
 });
@@ -20,7 +24,7 @@ const LobbyScreen = ({ route }) => {
   const { navigate, goBack, dispatch } = useNavigation();
   const { lobbyId } = route.params;
   const { user } = useUser();
-  const { lobby, readyUp, startMatch, deleteLobby } = useLobby({
+  const { lobby, readyUp, startMatch, deleteLobby, joinTeam } = useLobby({
     lobbyId,
     userId: user.uid,
   });
@@ -38,7 +42,7 @@ const LobbyScreen = ({ route }) => {
 
   const handleStartMatch = () => {
     createMatch({
-      players: players.map((value, index) => ({ ...value, team: index })),
+      players,
       data: {
         throws: { 0: [], 1: [] },
         playerTurn: user.uid,
@@ -52,6 +56,9 @@ const LobbyScreen = ({ route }) => {
   useEffect(() => {
     if (lobby) {
       lobbyIsLoaded.current = true;
+      if (lobby?.players[user.uid]?.team === undefined) {
+        joinTeam().then().catch(console.log);
+      }
     }
 
     if (!lobby && lobbyIsLoaded.current) {
@@ -71,26 +78,23 @@ const LobbyScreen = ({ route }) => {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        style={{ flex: 1 }}
-        data={players}
-        keyExtractor={({ uid }) => uid}
-        renderItem={({ item: { name, ready } }) => (
-          <Text>{`${name} - ${ready ? "Ready" : "Not Ready"}`}</Text>
-        )}
-      />
-      <View style={{ flex: 1 }}>
-        <TouchableOpacity onPress={copyToClipboard}>
-          <Text>{lobby?.channel?.invite}</Text>
-        </TouchableOpacity>
-      </View>
-      <Button onPress={readyUp} title="Ready" />
-      {isHost && <Button onPress={deleteLobby} title="Delete Lobby" />}
-      {isHost && allReady && (
+    <View style={styles.outerContainer}>
+      <SafeAreaView style={styles.container}>
+        <View style={{ flex: 1 }}>
+          <TeamsList players={players} />
+        </View>
+        <View style={{ flex: 1 }}>
+          <TouchableOpacity onPress={copyToClipboard}>
+            <Text>{lobby?.channel?.invite}</Text>
+          </TouchableOpacity>
+        </View>
+        <Button onPress={readyUp} title="Ready" />
+        {isHost && <Button onPress={deleteLobby} title="Delete Lobby" />}
+        {isHost && allReady && (
         <Button onPress={handleStartMatch} title="Start Match" />
       )}
-    </SafeAreaView>
+      </SafeAreaView>
+    </View>
   );
 };
 

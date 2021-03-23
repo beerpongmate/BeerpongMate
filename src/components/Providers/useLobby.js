@@ -60,11 +60,20 @@ const useLobby = ({ lobbyId, userId }) => {
 
   const createLobby = (data) => firestore().collection("Lobbies").add(data);
 
-  const joinLobby = (id, user) =>
-    firestore()
+  const joinLobby = (id, user) => firestore()
       .collection("Lobbies")
-      .doc(id)
-      .update({ [`players.${user.uid}`]: { name: user.displayName, ready: false } });
+      .doc(id).update({ [`players.${user.uid}`]: { name: user.displayName, ready: false } })
+
+  const joinTeam = () => { 
+    const team1PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 0).length;
+    const team2PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 1).length;
+    const teamToJoin = team1PlayerCount < team2PlayerCount ? 0 : 1;
+    const fieldPath = new firestore.FieldPath('players', userId, 'team');
+    return firestore()
+      .collection("Lobbies")
+      .doc(lobbyId).update(fieldPath, teamToJoin);
+  }
+    
 
   const startMatch = (id) =>
     firestore().collection("Lobbies").doc(lobbyId).update({ matchId: id });
@@ -80,6 +89,7 @@ const useLobby = ({ lobbyId, userId }) => {
     lobbies,
     lobby,
     joinLobby,
+    joinTeam,
     readyUp,
     startMatch,
     deleteLobby
