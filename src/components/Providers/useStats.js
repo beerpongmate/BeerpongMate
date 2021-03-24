@@ -29,7 +29,6 @@ const useStats = (userId, matchId) => {
     };
 
     const processMatch = async (matchData) => {
-        console.log("Process Match")
         const matchStatRef = statsRef.collection('MatchStats').doc(matchId);
 
         if (!matchStatRef.exists) {
