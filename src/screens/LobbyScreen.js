@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { SafeAreaView, FlatList, StyleSheet, Text, Button, View, TouchableOpacity } from "react-native";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import Clipboard from '@react-native-clipboard/clipboard';
 import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 });
 
 const LobbyScreen = ({ route }) => {
-  const { navigate, goBack, dispatch } = useNavigation();
+  const { navigate, goBack } = useNavigation();
   const { lobbyId } = route.params;
   const { user } = useUser();
   const { lobby, readyUp, startMatch, deleteLobby, joinTeam } = useLobby({
@@ -67,7 +67,7 @@ const LobbyScreen = ({ route }) => {
 
     if (lobby?.matchId) {
       if (!hasJoinedMatch.current) {
-        navigate("Match", { matchId: lobby.matchId });
+        navigate("Match", { matchId: lobby.matchId, lobbyId });
         hasJoinedMatch.current = true;
       }
     }

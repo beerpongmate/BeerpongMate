@@ -62,7 +62,6 @@ const useMatch = (matchId, user) => {
     const { order, throws } = matchData || {};
     const player = players.find(({ uid }) => uid === user.uid)
     const { team } = player || {};
-    console.log(throws[team]);
     throws[team] = [...(throws[team] || []) , data];
     return matchRef.current.update({
       data: {

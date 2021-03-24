@@ -7,6 +7,8 @@ import SignUpScreen from "../screens/SignUpScreen";
 import OnlineScreen from "../screens/OnlineScreen";
 import LobbyScreen from "../screens/LobbyScreen";
 import SignInSuccessScreen from "../screens/SignInSuccessScreen";
+import MatchLandingScreen from "../screens/MatchLandingScreen";
+import StatsScreen from "../screens/StatsScreen";
 
 const Stack = createStackNavigator();
 
@@ -19,6 +21,8 @@ const MainStack = () => (
     <Stack.Screen name="Online" component={OnlineScreen} />
     <Stack.Screen name="Lobby" component={LobbyScreen} />
     <Stack.Screen name="Match" component={MatchScreen} />
+    <Stack.Screen name="MatchLanding" component={MatchLandingScreen} />
+    <Stack.Screen name="Stats" component={StatsScreen} />
   </Stack.Navigator>
 );
 

@@ -29,7 +29,10 @@ const WelcomeScreen = () => {
         title="Offline Match"
       />
       {user && (
-        <Button onPress={() => navigate("Online")} title="Online Match" />
+        <>
+          <Button onPress={() => navigate("Online")} title="Online Match" />
+          <Button onPress={() => navigate("Stats")} title="Statistics" />
+        </>
       )}
       {!user ? (
         <>
