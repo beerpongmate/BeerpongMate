@@ -4,8 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   Text,
-  TouchableOpacity,
-} from "react-native";
+  TouchableOpacity} from "react-native";
 import theme from "../../assets/theme";
 import StatItem from "./StatItem";
 
