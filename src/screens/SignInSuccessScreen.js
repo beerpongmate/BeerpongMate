@@ -78,10 +78,9 @@ function SignInSuccessScreen() {
 <Icon name="thumb-up" size ={25}/>
         </Text>
       </View>
-      <View style={styles.button}>
-        <TouchableOpacity style={styles.buttonText} title="Continue to Sign In" onPress={() => navigate('Welcome')} />
+      <TouchableOpacity style={styles.button} onPress={() => navigate('Welcome')}>
         <Text style={styles.buttonText}>Continue to Sign In</Text>
-      </View>
+      </TouchableOpacity>
 
     </View>
   );
