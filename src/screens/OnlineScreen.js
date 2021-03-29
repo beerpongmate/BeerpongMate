@@ -65,7 +65,7 @@ const OnlineScreen = () => {
           renderItem={({
             item: {
               id,
-              host: { name },
+              host,
               matchId,
               players
             },
@@ -75,7 +75,7 @@ const OnlineScreen = () => {
               key={id}
               style={styles.lobby}
             >
-              <Text style={styles.lobbyLabel}>{`${name}'s Lobby`}</Text>
+              <Text style={styles.lobbyLabel}>{`${host?.name}'s Lobby`}</Text>
             </TouchableOpacity>
           )}
         />

@@ -4,7 +4,7 @@ const getLobbyModel = (user) => ({
     name: user?.displayName,
   },
   players: {
-    [user.uid]: { ready: false, name: user.displayName },
+    [user.uid]: { ready: false, name: user.displayName, team: 0 },
   },
 });
 

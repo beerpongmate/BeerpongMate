@@ -56,8 +56,6 @@ const styles = StyleSheet.create({
 const StatsContainer = ({ stats = {}, playerId }) => {
   const { name, throwCount, hitCount, streak } = stats[playerId] || {};
 
-  console.log((hitCount / throwCount).toFixed(2));
-  console.log((hitCount / throwCount).toFixed(2) === 'NaN');
   const hitRatio = (hitCount / throwCount).toFixed(2);
 
   const hitRatioDisplay = hitRatio === 'NaN' ? 0 : hitRatio;
