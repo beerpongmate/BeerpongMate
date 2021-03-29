@@ -9,6 +9,7 @@ import LobbyScreen from "../screens/LobbyScreen";
 import SignInSuccessScreen from "../screens/SignInSuccessScreen";
 import MatchLandingScreen from "../screens/MatchLandingScreen";
 import StatsScreen from "../screens/StatsScreen";
+import AchievementsScreen from "../screens/AchievementScreen";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ const MainStack = () => (
     <Stack.Screen name="Match" component={MatchScreen} />
     <Stack.Screen name="MatchLanding" component={MatchLandingScreen} />
     <Stack.Screen name="Stats" component={StatsScreen} />
+    <Stack.Screen name="Achievements" component={AchievementsScreen} />
   </Stack.Navigator>
 );
 

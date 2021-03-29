@@ -10,12 +10,15 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import MainStack from "./src/navigation/MainStack";
 import WithUser from "./src/components/Providers/WithUser";
+import WithAchievements from "./src/components/Providers/WithAchievements";
 
 const App = () => (
   <WithUser>
-    <NavigationContainer>
-      <MainStack />
-    </NavigationContainer>
+    <WithAchievements>
+      <NavigationContainer>
+        <MainStack />
+      </NavigationContainer>
+    </WithAchievements>
   </WithUser>
 );
 

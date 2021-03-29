@@ -26,12 +26,13 @@ const WelcomeScreen = () => {
       <Button
         onPress={() =>
           navigate("Match", { players: [getUserMatchModel(user)] })}
-        title="Offline Match"
+        title="Solo Training"
       />
       {user && (
         <>
           <Button onPress={() => navigate("Online")} title="Online Match" />
           <Button onPress={() => navigate("Stats")} title="Statistics" />
+          <Button onPress={() => navigate("Achievements")} title="Achievements" />
         </>
       )}
       {!user ? (

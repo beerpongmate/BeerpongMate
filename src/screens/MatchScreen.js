@@ -5,6 +5,7 @@ import TableContainer from "../components/TableContainer";
 import MatchEventTypes from "../constants/MatchEventTypes";
 import StatsContainer from "../components/StatsContainer";
 import { useUser } from "../components/Providers/WithUser";
+import { useAchievements } from "../components/Providers/WithAchievements";
 import useMatch from "../components/Providers/useMatch";
 import CupContainer from "../components/CupContainer";
 import theme from "../../assets/theme";
@@ -61,16 +62,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const defaultPlayers = [
-  {
-    name: "Harold",
-    uid: "000",
-  },
-  {
-    name: "Kumar",
-    uid: "001",
-  },
-];
+const defaultPlayer = {
+  name: "Harold",
+  uid: "000",
+};
 
 const MatchScreen = ({ route }) => {
   const { navigate } = useNavigation();
@@ -83,13 +78,15 @@ const MatchScreen = ({ route }) => {
   const { user } = useUser();
   const { matchId, lobbyId } = route?.params || {};
   const { match, addThrow } = useMatch(matchId, user);
-  const { stats: userStats, fetchStats, processMatch } = useStats(user.uid, matchId);
+  const { processMatch } = useStats(user?.uid, matchId);
+  const { processMatch: processMatchAchievements } = useAchievements();
   const [lowerContainerHeight, setLowerContainerHeight] = useState(null);
-  const { players } = match || { players: defaultPlayers };
+  const practicePlayer = user?.uid ? [{ ...user, name: user.displayName }] : [defaultPlayer];
+  const { players } = match || { players: practicePlayer };
   const currentPlayerId = match?.data?.playerTurn;
   const currentPlayer = (match?.players || []).find(({ uid }) => uid === currentPlayerId)
   const playerTurn = currentPlayerId === user?.uid;
-  const player = (match?.players || []).find(({ uid }) => uid === user.uid);
+  const player = (match?.players || []).find(({ uid }) => uid === user?.uid);
   const team = player?.team;
   const throws = match?.data?.throws[team] || [];
   const lastThrow = throws.length > 0 ? throws[throws.length - 1] : undefined;
@@ -110,10 +107,11 @@ const MatchScreen = ({ route }) => {
       };
     });
     setPlayerIndex(0);
-  }, [players]);
+  }, []);
 
   useEffect(() => {
     if (winningTeam !== undefined) {
+      processMatchAchievements(match);
       processMatch(match).then(
         () => {
           navigate('MatchLanding', { matchData: match, lobbyId });
@@ -142,6 +140,8 @@ const MatchScreen = ({ route }) => {
   const setStreak = (streak, playerId) => {
     stats.current[playerId].streak = streak;
   };
+
+  console.log(stats.current);
 
   const handleHit = (playerId, event) => {
     setThrowCount(stats.current[playerId].throwCount + 1, playerId);
