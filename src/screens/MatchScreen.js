@@ -98,6 +98,20 @@ const MatchScreen = ({ route }) => {
   const winningTeam = match?.winningTeam;
     
   useEffect(() => {
+    if (matchId) {
+      players.forEach(({ uid, ...playerData }) => {
+        stats.current[uid] = {
+          ...playerData,
+          throwCount: 0,
+          hitCount: 0,
+          streak: 0,
+        };
+      });
+      setPlayerIndex(0);
+    }
+  }, [players]);
+
+  useEffect(() => {
     players.forEach(({ uid, ...playerData }) => {
       stats.current[uid] = {
         ...playerData,
