@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
     }
 });
 
-const WelcomeButton = ({ color, onPress, label }) => (
-  <View style={styles.shadow}>
+const PrimaryButton = ({ color, onPress, label, style }) => (
+  <View style={[styles.shadow, style]}>
     <TouchableOpacity style={[styles.container, {borderColor: color}]} onPress={onPress}>
       <View style={[styles.innerContainer, {borderColor: color, backgroundColor: color}]}>
         <Text style={[styles.textStyle, { color: color ? '#fff' : 'black' }]}>{label}</Text>
@@ -44,4 +44,4 @@ const WelcomeButton = ({ color, onPress, label }) => (
   </View>
 )
 
-export default WelcomeButton;
+export default PrimaryButton;

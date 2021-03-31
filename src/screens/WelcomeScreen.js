@@ -3,7 +3,7 @@ import * as React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
-import WelcomeButton from "../components/Buttons/WelcomeButton";
+import PrimaryButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
 
 const styles = StyleSheet.create({
@@ -43,24 +43,24 @@ const WelcomeScreen = () => {
     
       {user && (
         <>
-          <WelcomeButton onPress={() => navigate("Online")} label="Online Match" color={primaryColor} />
-          <WelcomeButton onPress={() => navigate("Stats")} label="Statistics" color={secondaryColor} />
-          <WelcomeButton onPress={() => navigate("Achievements")} label="Achievements" />
+          <PrimaryButton onPress={() => navigate("Online")} label="Online Match" color={primaryColor} />
+          <PrimaryButton onPress={() => navigate("Stats")} label="Statistics" color={secondaryColor} />
+          <PrimaryButton onPress={() => navigate("Achievements")} label="Achievements" />
         </>
       )}
       {!user && (
         <>
-          <WelcomeButton onPress={() => navigate("SignIn")} label="Sign In" color={primaryColor} />
-          <WelcomeButton onPress={() => navigate("SignUp")} label="Create Account" color={secondaryColor} />
+          <PrimaryButton onPress={() => navigate("SignIn")} label="Sign In" color={primaryColor} />
+          <PrimaryButton onPress={() => navigate("SignUp")} label="Create Account" color={secondaryColor} />
         </>
       )}
-      <WelcomeButton
+      <PrimaryButton
         onPress={() =>
           navigate("Match", { players: [getUserMatchModel(user)] })}
         label="Practice Mode"
       />
       {user &&  (
-        <WelcomeButton onPress={signOut} label="Sign Out" />
+        <PrimaryButton onPress={signOut} label="Sign Out" />
       )}
       
     </SafeAreaView>

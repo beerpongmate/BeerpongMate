@@ -4,51 +4,12 @@ import cloneDeep from "lodash/cloneDeep";
 import CupRowContainer from "./CupRowContainer";
 import MatchEventTypes from "../constants/MatchEventTypes";
 import theme from "../../assets/theme";
+import PrimaryButton from "./Buttons/PrimaryButton";
 
 const styles = StyleSheet.create({
   container: {},
-  missButton: {
+  primaryButton: {
     marginTop: 40,
-    backgroundColor: "transparent",
-    borderRadius: 5,
-    borderWidth: 3,
-    borderColor: "#fff",
-    borderStyle: "solid",
-    alignSelf: "center",
-  },
-  undoButton: {
-    marginTop: 40,
-    backgroundColor: "black",
-    borderRadius: 5,
-    borderWidth: 3,
-    borderColor: theme.colors.tableOuterBorder,
-    borderStyle: "solid",
-    alignSelf: "center",
-  },
-  confirmButton: {
-    marginTop: 40,
-    backgroundColor: "#fff",
-    borderRadius: 5,
-    borderWidth: 3,
-    borderColor: theme.colors.tableOuterBorder,
-    borderStyle: "solid",
-    alignSelf: "center",
-  },
-  confirmLabel: {
-    // fontFamily: 'Brushstroke-Plain',
-    textDecorationLine: "underline",
-    fontSize: 24,
-    color: theme.colors.table,
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-  },
-  buttonLabel: {
-    // fontFamily: 'Brushstroke-Plain',
-    textDecorationLine: "underline",
-    fontSize: 24,
-    color: "#fff",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
   },
   row: {
     flexDirection: "row",
@@ -265,35 +226,40 @@ const CupContainer = ({
       </View>
       {displayConfirm && (
       <View style={styles.row}>
-        <TouchableOpacity style={styles.undoButton} onPress={handleUndo}>
-          <Text style={styles.confirmLabel}>UNDO</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.confirmButton}
-          onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }}
-        >
-          <Text style={styles.confirmLabel}>HIT!</Text>
-        </TouchableOpacity>
+        <PrimaryButton 
+          onPress={handleUndo} 
+          label="CANCEL" 
+          style={styles.primaryButton}
+        />
+        <PrimaryButton 
+          onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }} 
+          label="HIT!          " 
+          color={theme.colors.cupBlue}
+          style={styles.primaryButton}
+        />
       </View>
       )}
       {showButtons && !displayConfirm && (
         <View style={styles.row}>
           {(playerCount > 1 && !matchId) && (
-            <TouchableOpacity style={styles.missButton} onPress={skipPlayer}>
-              <Text style={styles.buttonLabel}>SKIP</Text>
-            </TouchableOpacity>
+            <PrimaryButton
+              onPress={skipPlayer} 
+              label="SKIP" 
+              color={theme.colors.cupBlue}
+              style={styles.primaryButton}
+            />
           )}
-          <TouchableOpacity
-            style={styles.missButton}
+          <PrimaryButton
             onPress={() =>
-              handleEvent({
-                type: MatchEventTypes.MISS,
-                state: cupState.current,
-                playerId: currentPlayerId,
-              })}
-          >
-            <Text style={styles.buttonLabel}>MISS</Text>
-          </TouchableOpacity>
+                handleEvent({
+                  type: MatchEventTypes.MISS,
+                  state: cupState.current,
+                  playerId: currentPlayerId,
+                })}
+            label="MISS" 
+            color={theme.colors.cupBlue}
+            style={styles.primaryButton}
+          />
         </View>
       )}
     </View>
