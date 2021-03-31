@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: "#fff",
-      //justifyContent: "center",
+      // justifyContent: "center",
       alignItems: 'center',
       flexDirection: 'column',
     },
@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
 });
 
 const BeerpartyImg = require('../../assets/images/Beerparty.jpg');
+
 const continueButton = (props) => {
 
   const TexColor = "white"
@@ -74,8 +75,8 @@ function SignInSuccessScreen() {
     
         <Text style={styles.title}>
           erfolgreich eingeloggt  
-{' '}
-<Icon name="thumb-up" size ={25}/>
+          {' '}
+          <Icon name="thumb-up" size={25} />
         </Text>
       </View>
       <TouchableOpacity style={styles.button} onPress={() => navigate('Welcome')}>

@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 
 const MainStack = () => (
   <Stack.Navigator initialRouteName="Welcome">
-    <Stack.Screen name="Welcome" component={WelcomeScreen} />
+    <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
     <Stack.Screen name="SignIn" component={SignInScreen} />
     <Stack.Screen name="SignInSuccessScreen" component={SignInSuccessScreen} />
     <Stack.Screen name="SignUp" component={SignUpScreen} />
