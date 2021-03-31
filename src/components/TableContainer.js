@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.tableInnerBorder,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
-    backgroundColor: theme.colors.table,
+    backgroundColor: theme.colors.cupRed,
   },
   tableBorder: {
     margin: 15,

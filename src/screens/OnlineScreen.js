@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
   },
   lobbyContainer: {
     flex: 1,
-    backgroundColor: theme.colors.table,
+    backgroundColor: theme.colors.cupBlue,
     margin: 30,
     padding: 20,
   },
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   lobbyLabel: {
-    color: theme.colors.table,
+    color: theme.colors.cupRed,
   },
 });
 

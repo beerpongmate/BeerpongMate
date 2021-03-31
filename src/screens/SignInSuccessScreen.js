@@ -3,6 +3,8 @@ import {StyleSheet, Text, View, SafeAreaView, Button, ImageBackground, Pressable
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import { upperCase } from "lodash";
+import PrimaryButton from "../components/Buttons/PrimaryButton";
+import theme from "../../assets/theme";
 
 const styles = StyleSheet.create({
     container: {
@@ -31,11 +33,6 @@ const styles = StyleSheet.create({
     },
     button: {
       width: "90%",
-      height: 40,
-      backgroundColor: "grey",
-      borderRadius: 20,
-      justifyContent: "center",
-      alignItems: "center",
       position: "absolute",
       bottom: 70,
 
@@ -53,10 +50,8 @@ const styles = StyleSheet.create({
 
 const BeerpartyImg = require('../../assets/images/Beerparty.jpg');
 
-const continueButton = (props) => {
+const primaryColor = theme.colors.cupRed
 
-  const TexColor = "white"
-}
 
 
 function SignInSuccessScreen() {
@@ -70,18 +65,14 @@ function SignInSuccessScreen() {
         source={BeerpartyImg}
         style={styles.image}
       />
-
-      <View>
     
-        <Text style={styles.title}>
-          erfolgreich eingeloggt  
-          {' '}
-          <Icon name="thumb-up" size={25} />
-        </Text>
-      </View>
-      <TouchableOpacity style={styles.button} onPress={() => navigate('Welcome')}>
-        <Text style={styles.buttonText}>Continue to Sign In</Text>
-      </TouchableOpacity>
+      <Text style={styles.title}>
+        erfolgreich eingeloggt  
+        {' '}
+        <Icon name="thumb-up" size={25} />
+      </Text>
+
+      <PrimaryButton style={styles.button} label="Continue" onPress={() => navigate('Welcome')} color={primaryColor} />
 
     </View>
   );

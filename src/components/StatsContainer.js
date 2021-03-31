@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.tableInnerBorder,
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    backgroundColor: theme.colors.table,
+    backgroundColor: theme.colors.cupRed,
     justifyContent: "space-evenly",
   },
   row: {
