@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import useStats from '../components/Providers/useStats';
 import { useUser } from "../components/Providers/WithUser";
+import ThemedText from '../components/ThemedComponents/ThemedText';
 
 const styles = StyleSheet.create({
     container: {
@@ -16,7 +17,7 @@ const StatsScreen = () => {
 
     return (
       <View style={styles.container}>
-        <Text>{JSON.stringify(stats, null, 2)}</Text>
+        <ThemedText>{JSON.stringify(stats, null, 2)}</ThemedText>
       </View>
 );
 };

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Text,
   ImageBackground,
   Dimensions,
   Animated,
@@ -15,6 +14,7 @@ import { useNavigation } from "@react-navigation/native";
 import theme from "../../assets/theme";
 import { useUser } from "../components/Providers/WithUser";
 import FieldError from "../components/FieldError";
+import ThemedText from "../components/ThemedComponents/ThemedText";
 
 const cupImg = require('../../assets/images/cup_real.jpg');
 
@@ -143,7 +143,7 @@ const SignInScreen = () => {
               right: '50%' }}
             >
               <TouchableOpacity style={styles.button} onPress={triggerAnimation}>
-                <Text style={styles.buttonLabel}>SIGN IN</Text>
+                <ThemedText style={styles.buttonLabel}>SIGN IN</ThemedText>
               </TouchableOpacity>
             </Animated.View>
           </View>

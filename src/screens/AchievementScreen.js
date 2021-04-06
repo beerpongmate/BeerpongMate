@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useAchievements } from '../components/Providers/WithAchievements';
+import ThemedText from '../components/ThemedComponents/ThemedText';
 
 const styles = StyleSheet.create({
     container: {
@@ -14,7 +15,7 @@ const AchievementsScreen = () => {
 
     return (
       <View style={styles.container}>
-        <Text>{JSON.stringify(achievementData, null, 2)}</Text>
+        <ThemedText>{JSON.stringify(achievementData, null, 2)}</ThemedText>
       </View>
 );
 };

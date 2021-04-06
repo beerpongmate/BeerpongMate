@@ -1,5 +1,6 @@
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, View, TouchableOpacity } from "react-native";
 import React from 'react';
+import ThemedText from "../ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
     container: {
@@ -18,7 +19,6 @@ const styles = StyleSheet.create({
         padding: 10
     },
     textStyle: {
-        fontFamily: 'Rubik',
         fontSize: 24,
         textAlign: 'center'
     },
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.3,
         shadowRadius: 2.22,
-        elevation: 3,
+        elevation: 2,
     }
 });
 
@@ -38,7 +38,7 @@ const PrimaryButton = ({ color, onPress, label, style }) => (
   <View style={[styles.shadow, style]}>
     <TouchableOpacity style={[styles.container, {borderColor: color}]} onPress={onPress}>
       <View style={[styles.innerContainer, {borderColor: color, backgroundColor: color}]}>
-        <Text style={[styles.textStyle, { color: color ? '#fff' : 'black' }]}>{label}</Text>
+        <ThemedText style={[styles.textStyle, { color: color ? '#fff' : 'black' }]}>{label}</ThemedText>
       </View>
     </TouchableOpacity>
   </View>
