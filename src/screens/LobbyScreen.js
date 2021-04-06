@@ -6,6 +6,7 @@ import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
 import { useUser } from "../components/Providers/WithUser";
 import TeamsList from "../components/TeamsList";
+import BeerpongTable from "../../assets/rnsvg/BeerpongTable";
 
 
 const styles = StyleSheet.create({
@@ -18,6 +19,9 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   lobbyContainer: {},
+  imageContainer: {
+    alignItems: 'center'
+  }
 });
 
 const LobbyScreen = ({ route }) => {
@@ -87,6 +91,9 @@ const LobbyScreen = ({ route }) => {
           <TouchableOpacity onPress={copyToClipboard}>
             <Text>{lobby?.channel?.invite}</Text>
           </TouchableOpacity>
+        </View>
+        <View style={styles.imageContainer}>
+          <BeerpongTable width="80%" />
         </View>
         <Button onPress={readyUp} title="Ready" />
         {isHost && <Button onPress={deleteLobby} title="Delete Lobby" />}
