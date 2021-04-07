@@ -3,8 +3,10 @@ import * as React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
-import PrimaryButton from "../components/Buttons/PrimaryButton";
+import WelcomeButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
+import SignInSuccessScreen from "./SignInSuccessScreen";
+import MatchScreen from "./MatchScreen";
 
 const styles = StyleSheet.create({
   container: {
@@ -43,24 +45,24 @@ const WelcomeScreen = () => {
     
       {user && (
         <>
-          <PrimaryButton onPress={() => navigate("Online")} label="Online Match" color={primaryColor} />
-          <PrimaryButton onPress={() => navigate("Stats")} label="Statistics" color={secondaryColor} />
-          <PrimaryButton onPress={() => navigate("Achievements")} label="Achievements" />
+          <WelcomeButton onPress={() => navigate("Online")} label="Online Match" color={primaryColor} />
+          <WelcomeButton onPress={() => navigate("Stats")} label="Statistics" color={secondaryColor} />
+          <WelcomeButton onPress={() => navigate('Achievements')} label="Achievements" />
         </>
       )}
       {!user && (
         <>
-          <PrimaryButton onPress={() => navigate("SignIn")} label="Sign In" color={primaryColor} />
-          <PrimaryButton onPress={() => navigate("SignUp")} label="Create Account" color={secondaryColor} />
+          <WelcomeButton onPress={() => navigate("SignIn")} label="Sign In" color={primaryColor} />
+          <WelcomeButton onPress={() => navigate("SignUp")} label="Create Account" color={secondaryColor} />
         </>
       )}
-      <PrimaryButton
+      <WelcomeButton
         onPress={() =>
           navigate("Match", { players: [getUserMatchModel(user)] })}
         label="Practice Mode"
       />
       {user &&  (
-        <PrimaryButton onPress={signOut} label="Sign Out" />
+        <WelcomeButton onPress={signOut} label="Sign Out" />
       )}
       
     </SafeAreaView>
