@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import ThemedText from "./ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
   container: {
@@ -22,8 +23,8 @@ const styles = StyleSheet.create({
 const StatItem = ({ stat, iconName, label }) => (
   <View style={styles.container}>
     <Icon name={iconName} size={42} color="#fff" />
-    <Text style={[styles.textCenter, styles.stat]}>{stat}</Text>
-    <Text style={[styles.textCenter, styles.label]}>{label}</Text>
+    <ThemedText style={[styles.textCenter, styles.stat]}>{stat}</ThemedText>
+    <ThemedText style={[styles.textCenter, styles.label]}>{label}</ThemedText>
   </View>
 );
 

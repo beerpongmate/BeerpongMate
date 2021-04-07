@@ -10,10 +10,12 @@ const styles = StyleSheet.create({
   container: {},
   primaryButton: {
     marginTop: 40,
+    zIndex: 0
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-evenly",
+    zIndex: 0
   },
 });
 
@@ -233,7 +235,7 @@ const CupContainer = ({
         />
         <PrimaryButton 
           onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }} 
-          label="HIT!          " 
+          label="     HIT!     " 
           color={theme.colors.cupBlue}
           style={styles.primaryButton}
         />

@@ -1,10 +1,10 @@
 import React from "react";
-import {StyleSheet, Text, View, SafeAreaView, Button, ImageBackground, Pressable, TouchableOpacity} from "react-native";
+import {StyleSheet, View, SafeAreaView, Button, ImageBackground, Pressable, TouchableOpacity} from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
-import { upperCase } from "lodash";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
+import ThemedText from "../components/ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
     container: {
@@ -66,11 +66,11 @@ function SignInSuccessScreen() {
         style={styles.image}
       />
     
-      <Text style={styles.title}>
+      <ThemedText style={styles.title}>
         erfolgreich eingeloggt  
         {' '}
         <Icon name="thumb-up" size={25} />
-      </Text>
+      </ThemedText>
 
       <PrimaryButton style={styles.button} label="Continue" onPress={() => navigate('Welcome')} color={primaryColor} />
 

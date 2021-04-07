@@ -5,11 +5,11 @@ import {
   StyleSheet,
   TextInput,
   TouchableOpacity,
-  Text,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import theme from "../../assets/theme";
 import { useUser } from "../components/Providers/WithUser";
+import ThemedText from "../components/ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
   container: {
@@ -89,7 +89,7 @@ const SignInScreen = () => {
         />
       </View>
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonLabel}>SIGN UP</Text>
+        <ThemedText style={styles.buttonLabel}>SIGN UP</ThemedText>
       </TouchableOpacity>
     </SafeAreaView>
   );
