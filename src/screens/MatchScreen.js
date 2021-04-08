@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View, Text, Platform} from "react-native";
+import { SafeAreaView, StyleSheet, View, Platform} from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import TableContainer from "../components/TableContainer";
@@ -10,6 +10,7 @@ import useMatch from "../components/Providers/useMatch";
 import CupContainer from "../components/CupContainer";
 import theme from "../../assets/theme";
 import useStats from "../components/Providers/useStats";
+import ThemedText from "../components/ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
   container: {
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.tableInnerBorder,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    backgroundColor: theme.colors.table,
+    backgroundColor: theme.colors.cupRed,
     flex: 1,
   },
   tableBorder: {
@@ -128,7 +129,7 @@ const MatchScreen = ({ route }) => {
       processMatchAchievements(match);
       processMatch(match).then(
         () => {
-          navigate('MatchLanding', { matchData: match, lobbyId });
+          navigate('MainTab', { params: { matchData: match, lobbyId }, screen: 'Winner' });
          }
       ).catch(console.log);
     }
@@ -228,9 +229,9 @@ const MatchScreen = ({ route }) => {
         <View style={styles.tableBorder}>
           <View style={styles.tableContainer}>
             <View style={styles.tableSpacer}>
-              <Text style={styles.playerName}>
+              <ThemedText style={styles.playerName}>
                 {(currentPlayer || { name: "Waiting for Players"}).name}
-              </Text>
+              </ThemedText>
 
               <View
                 style={styles.fill}

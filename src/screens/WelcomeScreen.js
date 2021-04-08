@@ -1,12 +1,11 @@
-import { SafeAreaView, Text, StyleSheet, Button, Image, Dimensions } from "react-native";
+import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
 import * as React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
 import WelcomeButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
-import SignInSuccessScreen from "./SignInSuccessScreen";
-import MatchScreen from "./MatchScreen";
+import ThemedText from "../components/ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
   container: {
@@ -16,8 +15,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   helloWorld: {
-    textAlign: "center",
-    fontFamily: 'Rubik'
+    textAlign: "center"
   },
 });
 
@@ -41,7 +39,7 @@ const WelcomeScreen = () => {
         resizeMode='contain'
         source={img}
       />
-      <Text style={styles.helloWorld}>{user ? user.displayName : "Guest"}</Text>
+      <ThemedText style={styles.helloWorld}>{user ? user.displayName : "Guest"}</ThemedText>
     
       {user && (
         <>

@@ -1,9 +1,10 @@
 import React from "react";
-import {StyleSheet, Text, View, ImageBackground,TouchableOpacity} from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import {StyleSheet, View, ImageBackground} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
+import ThemedText from "../components/ThemedComponents/ThemedText";
+import { useUser } from "../components/Providers/WithUser";
 
 const styles = StyleSheet.create({
     container: {
@@ -59,6 +60,7 @@ const primaryColor = theme.colors.cupRed
 
 function SignInSuccessScreen() {
   const { navigate } = useNavigation();
+  const { user: { displayName } } = useUser();
 
 
   return (
@@ -68,15 +70,13 @@ function SignInSuccessScreen() {
         source={SuccessImg}
         style={styles.image}
       />
-      <View>
-        <Text style={styles.title}>
-          erfolgreich eingeloggt  
-          {' '}
-          <Icon name="thumb-up" size={25} />
-        </Text>
-      </View>
+      <ThemedText style={styles.title}>
+        Welcome 
+        {' '}
+        {displayName}
+        !
+      </ThemedText>
       <PrimaryButton style={styles.button} label="Continue" onPress={() => navigate('Welcome')} color={primaryColor} />
-
     </View>
   );
 }

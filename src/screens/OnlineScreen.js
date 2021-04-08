@@ -3,7 +3,6 @@ import {
   View,
   SafeAreaView,
   FlatList,
-  Text,
   Button,
   StyleSheet,
   TouchableOpacity,
@@ -13,6 +12,7 @@ import theme from "../../assets/theme";
 import useLobby from "../components/Providers/useLobby";
 import { useUser } from "../components/Providers/WithUser";
 import getLobbyModel from "../utils/getLobbyModel";
+import ThemedText from "../components/ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
   container: {
@@ -75,7 +75,7 @@ const OnlineScreen = () => {
               key={id}
               style={styles.lobby}
             >
-              <Text style={styles.lobbyLabel}>{`${host?.name}'s Lobby`}</Text>
+              <ThemedText style={styles.lobbyLabel}>{`${host?.name}'s Lobby`}</ThemedText>
             </TouchableOpacity>
           )}
         />

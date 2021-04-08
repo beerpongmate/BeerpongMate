@@ -7,6 +7,7 @@ import {
   TouchableOpacity} from "react-native";
 import theme from "../../assets/theme";
 import StatItem from "./StatItem";
+import ThemedText from "./ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
   counter: {
@@ -66,7 +67,7 @@ const StatsContainer = ({ stats = {}, playerId }) => {
         <ScrollView>
           <View>
             <View style={styles.row}>
-              <Text style={styles.playerName}>{name}</Text>
+              <ThemedText style={styles.playerName}>{name}</ThemedText>
             </View>
             <View style={styles.row}>
               <StatItem stat={throwCount} iconName="circle" label="Throws" />

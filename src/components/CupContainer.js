@@ -7,14 +7,20 @@ import theme from "../../assets/theme";
 import PrimaryButton from "./Buttons/PrimaryButton";
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+  },
   primaryButton: {
     marginTop: 40,
+    zIndex: 0
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-evenly",
+    zIndex: 0
   },
+  buttonPadding: {
+    paddingHorizontal: 35
+  }
 });
 
 const state10 = {
@@ -232,10 +238,11 @@ const CupContainer = ({
           style={styles.primaryButton}
         />
         <PrimaryButton 
-          onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }} 
-          label="HIT!          " 
+          onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }}
+          label="HIT!"
           color={theme.colors.cupBlue}
           style={styles.primaryButton}
+          containerStyle={styles.buttonPadding}
         />
       </View>
       )}

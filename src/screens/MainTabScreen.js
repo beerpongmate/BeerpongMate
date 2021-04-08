@@ -1,33 +1,47 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from "react";
+import { StyleSheet, View } from 'react-native';
 import WelcomeScreen from './WelcomeScreen';
 import AchievementsScreen from './AchievementScreen';
 import OnlineScreen from './OnlineScreen';
 import MatchLandingScreen from './MatchLandingScreen';
+import ThemedText from '../components/ThemedComponents/ThemedText';
 
 const Tab = createBottomTabNavigator();
+
+const styles = StyleSheet.create({
+  tabContainer: {
+    alignItems: 'center'
+  }
+});
+
 
 function MainTab() {
   return (
     <Tab.Navigator
-      initialRouteName="Online"
+      initialRouteName="Winner"
       tabBarOptions={{
         activeTintColor: 'black',
+        showLabel: false,
+        style: {
+          height: 100
+        }
       }}
     >
-      
       <Tab.Screen
         name="Winner"
         component={MatchLandingScreen}
         options={{
-          fontSize: 40,
-          tabBarLabel: 'Winner',
-          labelStyle: {
-            fontSize: 30,
-          }, 
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="trophy" color={'#1c52b0'} size={40} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.tabContainer}>
+              <MaterialCommunityIcons
+                name={focused ? "trophy" : "trophy-outline"}
+                color="#1c52b0"
+                size={40}
+              />
+              <ThemedText>Winner</ThemedText>
+            </View>
           ),
         }}
       />
@@ -35,9 +49,15 @@ function MainTab() {
         name="Achievements"
         component={AchievementsScreen}
         options={{
-          tabBarLabel: 'Achievements',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="arm-flex" color={'#1c52b0'} size={40} />
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={styles.tabContainer}>
+              <MaterialCommunityIcons
+                name={focused ? "arm-flex" : "arm-flex-outline"}
+                color="#1c52b0"
+                size={40}
+              />
+              <ThemedText>Achievements</ThemedText>
+            </View>
           ),
         }}
       />

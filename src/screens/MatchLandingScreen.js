@@ -1,12 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useUser } from "../components/Providers/WithUser";
 import useLobby from "../components/Providers/useLobby";
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
+import ThemedText from '../components/ThemedComponents/ThemedText';
 
 const styles = StyleSheet.create({
   container: {
@@ -55,13 +54,13 @@ const MatchLandingScreen = () => {
 
     const renderWinner = () => {
         if (winningTeam === -1) {
-            return <Text style={styles.title}>Draw</Text>
+            return <ThemedText style={styles.title}>Draw</ThemedText>
         }
     
         return (
           <>
-            <Text style={styles.title}>Congratulations</Text>
-            {players.filter(({ team }) => team === winningTeam).map(({ name }) => <Text style={styles.player}>{name}</Text>)} 
+            <ThemedText style={styles.title}>Congratulations</ThemedText>
+            {players.filter(({ team }) => team === winningTeam).map(({ name }) => <ThemedText style={styles.player}>{name}</ThemedText>)} 
           </>
         );
         
