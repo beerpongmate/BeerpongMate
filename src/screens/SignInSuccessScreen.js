@@ -1,16 +1,16 @@
 import React from "react";
-import {StyleSheet, View, SafeAreaView, Button, ImageBackground, Pressable, TouchableOpacity} from "react-native";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import {StyleSheet, View, ImageBackground} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
 import ThemedText from "../components/ThemedComponents/ThemedText";
+import { useUser } from "../components/Providers/WithUser";
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      flex: 3,
       backgroundColor: "#fff",
-      // justifyContent: "center",
+      justifyContent: "center",
       alignItems: 'center',
       flexDirection: 'column',
     },
@@ -20,16 +20,20 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       flexDirection: 'column',},
     image: {
-      width: "100%",
-      height: "100%",
+      width: 300,
+      height: 350,
       resizeMode: "contain",
       position: "absolute",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 60,
     },
     title: {
-      color: "white",
+      color: "black",
       fontSize: 25,
       fontWeight: "500",
-      top: 30,
+      bottom: 275,
+      fontFamily: 'Rubik',
     },
     button: {
       width: "90%",
@@ -48,7 +52,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const BeerpartyImg = require('../../assets/images/Beerparty.jpg');
+const SuccessImg = require('../../assets/images/Success.png');
 
 const primaryColor = theme.colors.cupRed
 
@@ -56,24 +60,23 @@ const primaryColor = theme.colors.cupRed
 
 function SignInSuccessScreen() {
   const { navigate } = useNavigation();
+  const { user: { displayName } } = useUser();
 
 
   return (
     <View style={styles.container}>
 
       <ImageBackground
-        source={BeerpartyImg}
+        source={SuccessImg}
         style={styles.image}
       />
-    
       <ThemedText style={styles.title}>
-        erfolgreich eingeloggt  
+        Welcome 
         {' '}
-        <Icon name="thumb-up" size={25} />
+        {displayName}
+        !
       </ThemedText>
-
       <PrimaryButton style={styles.button} label="Continue" onPress={() => navigate('Welcome')} color={primaryColor} />
-
     </View>
   );
 }

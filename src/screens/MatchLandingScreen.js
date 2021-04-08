@@ -1,8 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useUser } from "../components/Providers/WithUser";
 import useLobby from "../components/Providers/useLobby";
+import PrimaryButton from "../components/Buttons/PrimaryButton";
+import theme from "../../assets/theme";
 import ThemedText from '../components/ThemedComponents/ThemedText';
 
 const styles = StyleSheet.create({
@@ -24,13 +26,16 @@ const styles = StyleSheet.create({
         color: 'black',
         textAlign: 'center',
         fontSize: 18
+    },
+    bottomOffset: {
+      marginBottom: 40,
     }
 });
 
 const MatchLandingScreen = () => {
   const { navigate } = useNavigation();
   const { params } = useRoute();
-  const { matchData: { winningTeam, players }, lobbyId } = params;
+  const { matchData: { winningTeam, players }, lobbyId } = params || { matchData: { winningTeam: 0, players: [ { uid: "0", team: 0, name: 'whak' } ] } }
   const { user } = useUser();
   const { lobby, deleteLobby } = useLobby({
     lobbyId,
@@ -45,6 +50,7 @@ const MatchLandingScreen = () => {
     }
     
   };
+    const primaryColor = theme.colors.cupRed;
 
     const renderWinner = () => {
         if (winningTeam === -1) {
@@ -65,7 +71,7 @@ const MatchLandingScreen = () => {
         <View style={styles.innerContainer}>
           {renderWinner()}
         </View>
-        <Button onPress={handleContinue} title="CONTINUE" />
+        <PrimaryButton style={[styles.button, styles.bottomOffset]} label="Continue" onPress={() => navigate('Welcome')} color={primaryColor} />
       </View>
     )
 };

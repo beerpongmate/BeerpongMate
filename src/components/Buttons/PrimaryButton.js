@@ -34,10 +34,10 @@ const styles = StyleSheet.create({
     }
 });
 
-const PrimaryButton = ({ color, onPress, label, style }) => (
+const PrimaryButton = ({ color, onPress, label, style, containerStyle }) => (
   <View style={[styles.shadow, style]}>
     <TouchableOpacity style={[styles.container, {borderColor: color}]} onPress={onPress}>
-      <View style={[styles.innerContainer, {borderColor: color, backgroundColor: color}]}>
+      <View style={[styles.innerContainer, containerStyle, {borderColor: color, backgroundColor: color}]}>
         <ThemedText style={[styles.textStyle, { color: color ? '#fff' : 'black' }]}>{label}</ThemedText>
       </View>
     </TouchableOpacity>

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.tableInnerBorder,
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
-    backgroundColor: theme.colors.table,
+    backgroundColor: theme.colors.cupRed,
     flex: 1,
   },
   tableBorder: {
@@ -129,7 +129,7 @@ const MatchScreen = ({ route }) => {
       processMatchAchievements(match);
       processMatch(match).then(
         () => {
-          navigate('MatchLanding', { matchData: match, lobbyId });
+          navigate('MainTab', { params: { matchData: match, lobbyId }, screen: 'Winner' });
          }
       ).catch(console.log);
     }
