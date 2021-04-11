@@ -1,6 +1,7 @@
 import firestore from "@react-native-firebase/firestore";
 import React, { useRef, useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { isUndefined } from "lodash";
 
 const useLobby = ({ lobbyId, userId }) => {
   const subscriber = useRef(() => {});
@@ -64,14 +65,23 @@ const useLobby = ({ lobbyId, userId }) => {
       .collection("Lobbies")
       .doc(id).update({ [`players.${user.uid}`]: { name: user.displayName, ready: false } })
 
-  const joinTeam = () => { 
-    const team1PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 0).length;
-    const team2PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 1).length;
-    const teamToJoin = team1PlayerCount < team2PlayerCount ? 0 : 1;
-    const fieldPath = new firestore.FieldPath('players', userId, 'team');
+  const joinTeam = (team) => { 
+    const playerData = lobby?.players[userId];
+    if (isUndefined(team)) {
+      const team1PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 0).length;
+      const team2PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 1).length;
+      const teamToJoin = team1PlayerCount < team2PlayerCount ? 0 : 1;
+      const fieldPath = new firestore.FieldPath('players', userId);
+      return firestore()
+        .collection("Lobbies")
+        .doc(lobbyId).update(fieldPath, {...playerData, ready: false, team: teamToJoin});
+    } 
+    const fieldPath = new firestore.FieldPath('players', userId);
     return firestore()
       .collection("Lobbies")
-      .doc(lobbyId).update(fieldPath, teamToJoin);
+      .doc(lobbyId).update(fieldPath, {...playerData, ready: false, team});
+    
+    
   }
     
 

@@ -11,6 +11,7 @@ import CupContainer from "../components/CupContainer";
 import theme from "../../assets/theme";
 import useStats from "../components/Providers/useStats";
 import ThemedText from "../components/ThemedComponents/ThemedText";
+import useLobby from "../components/Providers/useLobby";
 
 const styles = StyleSheet.create({
   container: {
@@ -73,11 +74,13 @@ const MatchScreen = ({ route }) => {
   const eventArray = useRef([]);
   const stats = useRef({});
   const upperTableIsRendered = useRef(false);
+  const lowerTableIsRendered = useRef(false);
   const [isAnimating, setAnimating] = useState(false);
   const [playerIndex, setPlayerIndex] = useState(undefined);
   const [round, setRound] = useState(0);
   const { user } = useUser();
   const { matchId, lobbyId } = route?.params || {};
+  const { deleteLobby } = useLobby({ lobbyId, userId: user.uid });
   const { match, addThrow } = useMatch(matchId, user);
   const { processMatch } = useStats(user?.uid, matchId);
   const { processMatch: processMatchAchievements } = useAchievements();
@@ -127,6 +130,7 @@ const MatchScreen = ({ route }) => {
   useEffect(() => {
     if (winningTeam !== undefined) {
       processMatchAchievements(match);
+      deleteLobby().catch(console.log);
       processMatch(match).then(
         () => {
           navigate('MainTab', { params: { matchData: match, lobbyId }, screen: 'Winner' });
@@ -155,8 +159,6 @@ const MatchScreen = ({ route }) => {
   const setStreak = (streak, playerId) => {
     stats.current[playerId].streak = streak;
   };
-
-  console.log(stats.current);
 
   const handleHit = (playerId, event) => {
     setThrowCount(stats.current[playerId].throwCount + 1, playerId);
@@ -202,6 +204,7 @@ const MatchScreen = ({ route }) => {
     },
   }) => {
     if (Platform.OS === 'ios' || upperTableIsRendered.current) {
+      lowerTableIsRendered.current = true;
       setLowerContainerHeight(layoutHeight);
     }
   };
@@ -223,16 +226,14 @@ const MatchScreen = ({ route }) => {
         matchId={matchId}
         cupFormation={cups}
         onCupContainerLayout={onUpperTableLayout}
+        isUsersTurn={playerTurn}
+        currentPlayer={currentPlayer}
         disablePress={winningTeam !== undefined || isAnimating || (!playerTurn && matchId)}
       />
       {matchId ? (
         <View style={styles.tableBorder}>
           <View style={styles.tableContainer}>
             <View style={styles.tableSpacer}>
-              <ThemedText style={styles.playerName}>
-                {(currentPlayer || { name: "Waiting for Players"}).name}
-              </ThemedText>
-
               <View
                 style={styles.fill}
                 onLayout={onLowerTableLayout}
