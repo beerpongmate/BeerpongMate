@@ -1,30 +1,39 @@
 import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
-import partition from 'lodash/partition';
+import { View, StyleSheet } from 'react-native';
+import { isUndefined } from 'lodash';
 import ThemedText from './ThemedComponents/ThemedText';
+import PlayerItem from './PlayerItem';
+import theme from '../../assets/theme';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: 'row'
-    }
+      alignItems: 'center',
+      flexDirection: 'row',
+      justifyContent: 'space-evenly'
+  },
+  text: {
+    fontSize: 24
+  }
 });
 
-const renderItem = ({ item }) => (<ThemedText>{item?.name}</ThemedText>)
+const TeamsList = ({ playerCount = 2, players, team }) => {
+  const slots = new Array(playerCount).fill("EMPTY");
+  const teamPlayers = players.filter(({ team: playerTeam }) => team === playerTeam);
 
-const TeamsList = ({ players }) => {
-    const [team1, team2] = partition(players, ({ team }) => team === 0);
+  teamPlayers.forEach((item, index) => {
+    slots[index] = item;
+  });
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: 1 }}>
-          <ThemedText>Team 1</ThemedText>
-          <FlatList renderItem={renderItem} keyExtractor={({ uid }) => uid} data={team1} />
-        </View>
-        <View style={{ flex: 1 }}>
-          <ThemedText>Team 2</ThemedText>
-          <FlatList renderItem={renderItem} keyExtractor={({ uid }) => uid} data={team2} />
-        </View>    
+        {
+          slots.map((item) => {
+            if (item === 'EMPTY') {
+              return <ThemedText style={[styles.text, { color: team === 0 ? theme.colors.cupBlue : theme.colors.cupRed }]}>Empty</ThemedText>;
+            } 
+            return <PlayerItem name={item?.name} ready={item?.ready} key={item?.uid} team={item?.team} />
+          })
+        }
       </View>
     );
 };
