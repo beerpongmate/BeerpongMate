@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 
 const StatsScreen = () => {
       const { user } = useUser();
-    const { stats, fetchStats } = useStats(user.uid);
+      const { stats, fetchStats } = useStats(user.uid);
 
     return (
       <View style={styles.container}>

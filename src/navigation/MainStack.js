@@ -11,11 +11,13 @@ import MatchLandingScreen from "../screens/MatchLandingScreen";
 import StatsScreen from "../screens/StatsScreen";
 import AchievementsScreen from "../screens/AchievementScreen";
 import MainTabScreen from "../screens/MainTabScreen";
+import MainDrawer from "../screens/MainDrawer";
 
 const Stack = createStackNavigator();
 
 const MainStack = () => (
-  <Stack.Navigator initialRouteName="Welcome">
+  <Stack.Navigator initialRouteName="MainDrawer">
+    <Stack.Screen name="MainDrawer" component={MainDrawer} options={{ headerShown: false }} />
     <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
     <Stack.Screen name="SignIn" component={SignInScreen} />
     <Stack.Screen name="SignInSuccessScreen" component={SignInSuccessScreen} />

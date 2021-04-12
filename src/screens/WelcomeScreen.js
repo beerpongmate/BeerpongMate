@@ -1,23 +1,28 @@
-import { SafeAreaView, StyleSheet, Image, Dimensions } from "react-native";
+import { SafeAreaView, StyleSheet, Image, Dimensions, TouchableOpacity} from "react-native";
 import * as React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { NavigationContainer , NavigationHelpersContext, useNavigation } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
 import WelcomeButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
 import ThemedText from "../components/ThemedComponents/ThemedText";
+import AchievementsScreen from "./AchievementScreen";
+import StatsScreen from "./StatsScreen";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignContent: "center",
-    justifyContent: "flex-end",
+    justifyContent: "center",
     backgroundColor: '#fff',
   },
   helloWorld: {
     textAlign: "center"
   },
 });
+
 
 const img = require('../../assets/images/logo_welcome.png');
 
@@ -32,10 +37,20 @@ const WelcomeScreen = () => {
 
   const { user, signOut } = useUser();
 
+  const Drawer = createDrawerNavigator();
+
   return (
+
     <SafeAreaView style={styles.container}>
+      <TouchableOpacity
+        style={{margin: 16,}}
+       // this needs work. Weil nicht im gleichen Screen definiert?
+       // onPress={this.props.navigation.openDrawer}
+      >
+        <Icon name="format-align-justify" size={34} color="black" />
+      </TouchableOpacity>
       <Image
-        style={{ position: 'absolute', width: '100%', height: logoHeight , top: 0, alignSelf: 'flex-start' }}
+        style={{ marginBottom: 35, width: '100%', height: logoHeight , top: 0, alignSelf: 'flex-start' }}
         resizeMode='contain'
         source={img}
       />

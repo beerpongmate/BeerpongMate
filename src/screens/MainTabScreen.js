@@ -2,7 +2,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import React from "react";
 import { StyleSheet, View } from 'react-native';
-import WelcomeScreen from './WelcomeScreen';
 import AchievementsScreen from './AchievementScreen';
 import OnlineScreen from './OnlineScreen';
 import MatchLandingScreen from './MatchLandingScreen';
