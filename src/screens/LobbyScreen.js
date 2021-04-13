@@ -1,8 +1,16 @@
 import React, { useEffect, useRef } from "react";
-import { SafeAreaView, FlatList, StyleSheet, Text, Button, View, TouchableOpacity } from "react-native";
+import {
+  SafeAreaView,
+  FlatList,
+  StyleSheet,
+  Text,
+  Button,
+  View,
+  TouchableOpacity
+} from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Clipboard from '@react-native-clipboard/clipboard';
-import partition from 'lodash/partition';
+import Clipboard from "@react-native-clipboard/clipboard";
+import partition from "lodash/partition";
 import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
 import { useUser } from "../components/Providers/WithUser";
@@ -12,7 +20,6 @@ import ThemedText from "../components/ThemedComponents/ThemedText";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -20,22 +27,22 @@ const styles = StyleSheet.create({
   },
   outerContainer: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
   lobbyContainer: {},
   imageContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     flex: 1
   }
 });
 
-const LobbyScreen = ({ route }) => {
+const LobbyScreen = ({ navigation, route }) => {
   const { navigate, goBack } = useNavigation();
   const { lobbyId } = route.params;
   const { user } = useUser();
   const { lobby, readyUp, startMatch, deleteLobby, joinTeam } = useLobby({
     lobbyId,
-    userId: user.uid,
+    userId: user.uid
   });
   const { createMatch } = useMatch();
   const lobbyIsLoaded = useRef(false);
@@ -43,11 +50,11 @@ const LobbyScreen = ({ route }) => {
 
   const players = Object.keys(lobby?.players || {}).map((id) => ({
     uid: id,
-    ...lobby.players[id],
+    ...lobby.players[id]
   }));
 
   const [team0, team1] = partition(players, ({ team }) => team === 0);
-  
+
   const playerCount = lobby?.playerCount || 4;
 
   const teamsAreEven = team0.length === team1.length;
@@ -68,8 +75,8 @@ const LobbyScreen = ({ route }) => {
       data: {
         throws: { 0: [], 1: [] },
         playerTurn: user.uid,
-        order: players.map(({ uid }) => uid),
-      },
+        order: players.map(({ uid }) => uid)
+      }
     }).then((docRef) => {
       startMatch(docRef.id);
     });
@@ -77,6 +84,20 @@ const LobbyScreen = ({ route }) => {
 
   useEffect(() => {
     if (lobby) {
+      if (isHost) {
+        navigation.setOptions({
+          headerBackTitle: "Delete"
+        });
+      }
+      navigation.setOptions({
+        headerTitle: () => (
+          <ThemedText
+            style={{ fontSize: 18, width: "100%", textAlign: "right" }}
+          >
+            {`${lobby?.host?.name}'s Lobby`}
+          </ThemedText>
+        )
+      });
       lobbyIsLoaded.current = true;
       if (userTeam === undefined) {
         joinTeam().then().catch(console.log);
@@ -97,27 +118,42 @@ const LobbyScreen = ({ route }) => {
 
   const copyToClipboard = () => {
     Clipboard.setString(lobby?.channel?.invite);
-  }
+  };
 
   return (
     <View style={styles.outerContainer}>
       <SafeAreaView style={styles.container}>
-        <TeamsList players={players} playerCount={Math.round(playerCount * 0.5)} team={0} />
+        <TeamsList
+          players={players}
+          playerCount={Math.round(playerCount * 0.5)}
+          team={0}
+        />
         <View style={styles.imageContainer}>
           <BeerpongTable size="100%" />
         </View>
-        <TeamsList players={players} playerCount={Math.round(playerCount * 0.5)} team={1} />
+        <TeamsList
+          players={players}
+          playerCount={Math.round(playerCount * 0.5)}
+          team={1}
+        />
         <View>
           <TouchableOpacity onPress={copyToClipboard}>
             <ThemedText>{lobby?.channel?.invite}</ThemedText>
           </TouchableOpacity>
         </View>
-        <PrimaryButton onPress={readyUp} color={theme.colors.cupRed} label="Ready" />
+        <PrimaryButton
+          onPress={readyUp}
+          color={theme.colors.cupRed}
+          label="Ready"
+        />
         {isHost && allReady && teamsAreEven && matchIsFull && (
-          <PrimaryButton onPress={handleStartMatch} color={theme.colors.cupBlue} label="Start Match" />
+          <PrimaryButton
+            onPress={handleStartMatch}
+            color={theme.colors.cupBlue}
+            label="Start Match"
+          />
         )}
         <PrimaryButton onPress={changeTeam} label="Change Team" />
-        {isHost && <PrimaryButton onPress={deleteLobby} label="Delete Lobby" />}
       </SafeAreaView>
     </View>
   );
