@@ -9,7 +9,8 @@ const useLobby = ({ lobbyId, userId }) => {
   const [lobby, setLobby] = useState(null);
   const lobbyRef = useRef(null);
 
-  const deleteLobby = () => firestore().collection("Lobbies").doc(lobbyId).delete();
+  const deleteLobby = () =>
+    firestore().collection("Lobbies").doc(lobbyId).delete();
 
   useFocusEffect(
     React.useCallback(() => {
@@ -49,45 +50,59 @@ const useLobby = ({ lobbyId, userId }) => {
   );
 
   // leave lobby on unmount
-  useEffect(() => () => { if (lobbyId) {
-          if (lobbyRef.current?.host?.uid !== userId) {
-            firestore()
-              .collection("Lobbies")
-              .doc(lobbyId)
-              .update({ [`players.${userId}`]: firestore.FieldValue.delete() })
-              .catch(() => {});
-          }
-        }} , [])
+  useEffect(
+    () => () => {
+      if (lobbyId) {
+        if (lobbyRef.current?.host?.uid !== userId) {
+          firestore()
+            .collection("Lobbies")
+            .doc(lobbyId)
+            .update({ [`players.${userId}`]: firestore.FieldValue.delete() })
+            .catch(() => {});
+        } else {
+          deleteLobby();
+        }
+      }
+    },
+    []
+  );
 
   const createLobby = (data) => firestore().collection("Lobbies").add(data);
 
-  const joinLobby = (id, user) => firestore()
+  const joinLobby = (id, user) =>
+    firestore()
       .collection("Lobbies")
-      .doc(id).update({ [`players.${user.uid}`]: { name: user.displayName, ready: false } })
+      .doc(id)
+      .update({
+        [`players.${user.uid}`]: { name: user.displayName, ready: false }
+      });
 
-  const joinTeam = (team) => { 
+  const joinTeam = (team) => {
     const playerData = lobby?.players[userId];
     if (isUndefined(team)) {
-      const team1PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 0).length;
-      const team2PlayerCount = Object.values(lobby?.players).filter(({ team }) => team === 1).length;
+      const team1PlayerCount = Object.values(lobby?.players).filter(
+        ({ team }) => team === 0
+      ).length;
+      const team2PlayerCount = Object.values(lobby?.players).filter(
+        ({ team }) => team === 1
+      ).length;
       const teamToJoin = team1PlayerCount < team2PlayerCount ? 0 : 1;
-      const fieldPath = new firestore.FieldPath('players', userId);
+      const fieldPath = new firestore.FieldPath("players", userId);
       return firestore()
         .collection("Lobbies")
-        .doc(lobbyId).update(fieldPath, {...playerData, ready: false, team: teamToJoin});
-    } 
-    const fieldPath = new firestore.FieldPath('players', userId);
+        .doc(lobbyId)
+        .update(fieldPath, { ...playerData, ready: false, team: teamToJoin });
+    }
+    const fieldPath = new firestore.FieldPath("players", userId);
     return firestore()
       .collection("Lobbies")
-      .doc(lobbyId).update(fieldPath, {...playerData, ready: false, team});
-    
-    
-  }
-    
+      .doc(lobbyId)
+      .update(fieldPath, { ...playerData, ready: false, team });
+  };
 
   const startMatch = (id) =>
     firestore().collection("Lobbies").doc(lobbyId).update({ matchId: id });
-  
+
   const readyUp = () =>
     firestore()
       .collection("Lobbies")
