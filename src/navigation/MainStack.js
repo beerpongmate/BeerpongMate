@@ -52,7 +52,11 @@ const MainStack = () => (
       component={MatchLandingScreen}
       options={{ headerShown: false }}
     />
-    <Stack.Screen name="Stats" component={StatsScreen} />
+    <Stack.Screen
+      name="Stats"
+      options={{ headerTitle: "Lifetime Statistics" }}
+      component={StatsScreen}
+    />
     <Stack.Screen name="Achievements" component={AchievementsScreen} />
     <Stack.Screen
       name="MainTab"
