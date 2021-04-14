@@ -20,13 +20,26 @@ const styles = StyleSheet.create({
   }
 });
 
-const StatItem = ({ stat, iconName, label, color = "#fff" }) => (
+const StatItem = ({
+  stat,
+  iconName,
+  label,
+  color = "#fff",
+  labelColor = "#fff"
+}) => (
   <View style={styles.container}>
     <Icon name={iconName} size={42} color={color || "#fff"} />
     <ThemedText style={[styles.textCenter, styles.stat, { color }]}>
       {stat}
     </ThemedText>
-    <ThemedText style={[styles.textCenter, styles.label, { color }]}>
+    <ThemedText
+      style={[
+        styles.textCenter,
+        styles.label,
+        { color },
+        { color: labelColor }
+      ]}
+    >
       {label}
     </ThemedText>
   </View>
