@@ -76,7 +76,7 @@ function SignInSuccessScreen() {
         {displayName}
         !
       </ThemedText>
-      <PrimaryButton style={styles.button} label="Continue" onPress={() => navigate('Welcome')} color={primaryColor} />
+      <PrimaryButton style={styles.button} label="Continue" onPress={() => navigate("MainDrawer")} color={primaryColor} />
     </View>
   );
 }

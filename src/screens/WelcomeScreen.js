@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Image, Dimensions, TouchableOpacity} from "react-native";
 import * as React from "react";
-import { NavigationContainer , NavigationHelpersContext, useNavigation } from '@react-navigation/native';
+import {useNavigation } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useUser } from "../components/Providers/WithUser";
@@ -32,7 +32,7 @@ const logoHeight = screenWidth * 1;
 const primaryColor = theme.colors.cupRed;
 const secondaryColor = theme.colors.cupBlue;
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({navigation}) => {
   const { navigate } = useNavigation();
 
   const { user, signOut } = useUser();
@@ -43,14 +43,19 @@ const WelcomeScreen = () => {
 
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
-        style={{margin: 16,}}
-       // this needs work. Weil nicht im gleichen Screen definiert?
-       // onPress={this.props.navigation.openDrawer}
+        style={{margin: 16,
+          position: "absolute",
+          top: 40,
+          zIndex: 10}}
+        onPress={navigation.openDrawer}
       >
         <Icon name="format-align-justify" size={34} color="black" />
       </TouchableOpacity>
       <Image
-        style={{ marginBottom: 35, width: '100%', height: logoHeight , top: 0, alignSelf: 'flex-start' }}
+        style={{ marginBottom: 35, 
+        width: '100%', 
+        height: logoHeight , 
+        top: 0, alignSelf: 'flex-start' }}
         resizeMode='contain'
         source={img}
       />

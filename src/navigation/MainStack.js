@@ -12,6 +12,7 @@ import StatsScreen from "../screens/StatsScreen";
 import AchievementsScreen from "../screens/AchievementScreen";
 import MainTabScreen from "../screens/MainTabScreen";
 import MainDrawer from "../screens/MainDrawer";
+import Rules from "../screens/RulesScreen";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +30,7 @@ const MainStack = () => (
     <Stack.Screen name="Stats" component={StatsScreen} />
     <Stack.Screen name="Achievements" component={AchievementsScreen} />
     <Stack.Screen name="MainTab" component={MainTabScreen} />
+    <Stack.Screen name="Rules" component={Rules} />
   </Stack.Navigator>
 );
 
