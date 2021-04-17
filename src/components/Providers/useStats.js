@@ -93,6 +93,8 @@ const useStats = (userId, matchId) => {
 
       const longestHitStreak = getLongestPlayerHitStreak(playerThrows);
 
+      console.log(longestHitStreak);
+
       const {
         hitCount,
         matchCount,
