@@ -5,12 +5,12 @@ import CupRowContainer from "./CupRowContainer";
 import MatchEventTypes from "../constants/MatchEventTypes";
 import theme from "../../assets/theme";
 import PrimaryButton from "./Buttons/PrimaryButton";
+import ThemedText from "./ThemedComponents/ThemedText";
 
 const styles = StyleSheet.create({
   container: {
   },
   primaryButton: {
-    marginTop: 40,
     zIndex: 0
   },
   row: {
@@ -20,6 +20,16 @@ const styles = StyleSheet.create({
   },
   buttonPadding: {
     paddingHorizontal: 35
+  },
+  playerName: {
+    textAlign: 'center',
+    color: '#fff',
+    fontSize: 18,
+  },
+  buttonContainer: {
+    height: 80,
+    marginTop: 15,
+    justifyContent: 'flex-end'
   }
 });
 
@@ -106,6 +116,8 @@ const CupContainer = ({
   style,
   matchId,
   cupFormation,
+  isUsersTurn,
+  currentPlayer,
   onCupContainerLayout = () => {}
 }) => {
   const [cupSize, setCupSize] = useState(0);
@@ -230,23 +242,24 @@ const CupContainer = ({
       >
         {renderCups(sideBasedFormation)}
       </View>
-      {displayConfirm && (
-      <View style={styles.row}>
-        <PrimaryButton 
-          onPress={handleUndo} 
-          label="CANCEL" 
-          style={styles.primaryButton}
-        />
-        <PrimaryButton 
-          onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }}
-          label="HIT!"
-          color={theme.colors.cupBlue}
-          style={styles.primaryButton}
-          containerStyle={styles.buttonPadding}
-        />
-      </View>
+      <View style={styles.buttonContainer}>
+        {displayConfirm && (
+        <View style={styles.row}>
+          <PrimaryButton 
+            onPress={handleUndo} 
+            label="CANCEL" 
+            style={styles.primaryButton}
+          />
+          <PrimaryButton 
+            onPress={() => { handlePress(pendingCup.current); setDisplayConfirm(false) }}
+            label="HIT!"
+            color={theme.colors.cupBlue}
+            style={styles.primaryButton}
+            containerStyle={styles.buttonPadding}
+          />
+        </View>
       )}
-      {showButtons && !displayConfirm && (
+        {showButtons && (isUsersTurn || !matchId ) && !displayConfirm && (
         <View style={styles.row}>
           {(playerCount > 1 && !matchId) && (
             <PrimaryButton
@@ -269,6 +282,8 @@ const CupContainer = ({
           />
         </View>
       )}
+        {showButtons && matchId && !isUsersTurn && (<ThemedText style={styles.playerName}>{`${currentPlayer?.name}'s Turn`}</ThemedText>)}
+      </View>
     </View>
   );
 };

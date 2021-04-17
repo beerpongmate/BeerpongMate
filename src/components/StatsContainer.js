@@ -67,9 +67,6 @@ const StatsContainer = ({ stats = {}, playerId }) => {
         <ScrollView>
           <View>
             <View style={styles.row}>
-              <ThemedText style={styles.playerName}>{name}</ThemedText>
-            </View>
-            <View style={styles.row}>
               <StatItem stat={throwCount} iconName="circle" label="Throws" />
               <StatItem stat={hitCount} iconName="cup" label="Hits" />
             </View>

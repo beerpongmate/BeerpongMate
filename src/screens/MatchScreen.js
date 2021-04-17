@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, View, Platform} from "react-native";
+import { SafeAreaView, StyleSheet, View, Platform } from "react-native";
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import TableContainer from "../components/TableContainer";
@@ -11,11 +11,12 @@ import CupContainer from "../components/CupContainer";
 import theme from "../../assets/theme";
 import useStats from "../components/Providers/useStats";
 import ThemedText from "../components/ThemedComponents/ThemedText";
+import useLobby from "../components/Providers/useLobby";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
   interactionBlock: {
     zIndex: 20,
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "transparent",
+    backgroundColor: "transparent"
   },
   tableContainer: {
     padding: 15,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     backgroundColor: theme.colors.cupRed,
-    flex: 1,
+    flex: 1
   },
   tableBorder: {
     margin: 15,
@@ -47,45 +48,51 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     backgroundColor: theme.colors.tableInnerBorder,
-    flex: 1,
+    flex: 1
   },
   tableSpacer: {
     alignContent: "flex-end",
-    flex: 1,
+    flex: 1
   },
   fill: {
-    flex: 1,
+    flex: 1
   },
   playerName: {
-    textAlign: 'center',
-    color: '#fff',
+    textAlign: "center",
+    color: "#fff",
     fontSize: 18
   }
 });
 
 const defaultPlayer = {
   name: "Harold",
-  uid: "000",
+  uid: "000"
 };
 
-const MatchScreen = ({ route }) => {
+const MatchScreen = ({ navigation, route }) => {
   const { navigate } = useNavigation();
   const eventArray = useRef([]);
   const stats = useRef({});
   const upperTableIsRendered = useRef(false);
+  const lowerTableIsRendered = useRef(false);
   const [isAnimating, setAnimating] = useState(false);
   const [playerIndex, setPlayerIndex] = useState(undefined);
   const [round, setRound] = useState(0);
   const { user } = useUser();
   const { matchId, lobbyId } = route?.params || {};
+  const { deleteLobby } = useLobby({ lobbyId, userId: user?.uid });
   const { match, addThrow } = useMatch(matchId, user);
   const { processMatch } = useStats(user?.uid, matchId);
   const { processMatch: processMatchAchievements } = useAchievements();
   const [lowerContainerHeight, setLowerContainerHeight] = useState(null);
-  const practicePlayer = user?.uid ? [{ ...user, name: user.displayName }] : [defaultPlayer];
+  const practicePlayer = user?.uid
+    ? [{ ...user, name: user.displayName }]
+    : [defaultPlayer];
   const { players } = match || { players: practicePlayer };
   const currentPlayerId = match?.data?.playerTurn;
-  const currentPlayer = (match?.players || []).find(({ uid }) => uid === currentPlayerId)
+  const currentPlayer = (match?.players || []).find(
+    ({ uid }) => uid === currentPlayerId
+  );
   const playerTurn = currentPlayerId === user?.uid;
   const player = (match?.players || []).find(({ uid }) => uid === user?.uid);
   const team = player?.team;
@@ -94,10 +101,13 @@ const MatchScreen = ({ route }) => {
   const cups = lastThrow?.state;
   const opponentTeam = team === 0 ? 1 : 0;
   const opponentThrows = match?.data?.throws[opponentTeam] || [];
-  const opponenLastThrow = opponentThrows.length > 0 ? opponentThrows[opponentThrows.length - 1] : undefined;
+  const opponenLastThrow =
+    opponentThrows.length > 0
+      ? opponentThrows[opponentThrows.length - 1]
+      : undefined;
   const opponentCups = opponenLastThrow?.state;
   const winningTeam = match?.winningTeam;
-    
+
   useEffect(() => {
     if (matchId) {
       players.forEach(({ uid, ...playerData }) => {
@@ -105,7 +115,7 @@ const MatchScreen = ({ route }) => {
           ...playerData,
           throwCount: 0,
           hitCount: 0,
-          streak: 0,
+          streak: 0
         };
       });
       setPlayerIndex(0);
@@ -113,12 +123,17 @@ const MatchScreen = ({ route }) => {
   }, [players]);
 
   useEffect(() => {
+    if (matchId) {
+      navigation.setOptions({
+        headerShown: false
+      });
+    }
     players.forEach(({ uid, ...playerData }) => {
       stats.current[uid] = {
         ...playerData,
         throwCount: 0,
         hitCount: 0,
-        streak: 0,
+        streak: 0
       };
     });
     setPlayerIndex(0);
@@ -127,11 +142,15 @@ const MatchScreen = ({ route }) => {
   useEffect(() => {
     if (winningTeam !== undefined) {
       processMatchAchievements(match);
-      processMatch(match).then(
-        () => {
-          navigate('MainTab', { params: { matchData: match, lobbyId }, screen: 'Winner' });
-         }
-      ).catch(console.log);
+      deleteLobby().catch(console.log);
+      processMatch(match)
+        .then(() => {
+          navigate("MainTab", {
+            params: { matchData: match, lobbyId },
+            screen: "Winner"
+          });
+        })
+        .catch(console.log);
     }
   }, [winningTeam]);
 
@@ -156,8 +175,6 @@ const MatchScreen = ({ route }) => {
     stats.current[playerId].streak = streak;
   };
 
-  console.log(stats.current);
-
   const handleHit = (playerId, event) => {
     setThrowCount(stats.current[playerId].throwCount + 1, playerId);
     setHitCount(stats.current[playerId].hitCount + 1, playerId);
@@ -165,7 +182,7 @@ const MatchScreen = ({ route }) => {
     if (!matchId) {
       nextPlayer();
     } else {
-        addThrow(event);
+      addThrow(event);
     }
   };
 
@@ -175,13 +192,13 @@ const MatchScreen = ({ route }) => {
     if (!matchId) {
       nextPlayer();
     } else {
-      addThrow(event)
+      addThrow(event);
     }
   };
 
   const eventMap = {
     [MatchEventTypes.HIT]: handleHit,
-    [MatchEventTypes.MISS]: handleMiss,
+    [MatchEventTypes.MISS]: handleMiss
   };
 
   const handleEvent = (event) => {
@@ -198,10 +215,11 @@ const MatchScreen = ({ route }) => {
 
   const onLowerTableLayout = ({
     nativeEvent: {
-      layout: { height: layoutHeight },
-    },
+      layout: { height: layoutHeight }
+    }
   }) => {
-    if (Platform.OS === 'ios' || upperTableIsRendered.current) {
+    if (Platform.OS === "ios" || upperTableIsRendered.current) {
+      lowerTableIsRendered.current = true;
       setLowerContainerHeight(layoutHeight);
     }
   };
@@ -223,20 +241,17 @@ const MatchScreen = ({ route }) => {
         matchId={matchId}
         cupFormation={cups}
         onCupContainerLayout={onUpperTableLayout}
-        disablePress={winningTeam !== undefined || isAnimating || (!playerTurn && matchId)}
+        isUsersTurn={playerTurn}
+        currentPlayer={currentPlayer}
+        disablePress={
+          winningTeam !== undefined || isAnimating || (!playerTurn && matchId)
+        }
       />
       {matchId ? (
         <View style={styles.tableBorder}>
           <View style={styles.tableContainer}>
             <View style={styles.tableSpacer}>
-              <ThemedText style={styles.playerName}>
-                {(currentPlayer || { name: "Waiting for Players"}).name}
-              </ThemedText>
-
-              <View
-                style={styles.fill}
-                onLayout={onLowerTableLayout}
-              >
+              <View style={styles.fill} onLayout={onLowerTableLayout}>
                 <CupContainer
                   cupFormation={opponentCups}
                   style={{ justifyContent: "flex-end" }}
@@ -257,7 +272,9 @@ const MatchScreen = ({ route }) => {
           round={round}
         />
       )}
-      {(isAnimating || (!playerTurn && matchId)) && <View style={styles.interactionBlock} />}
+      {(isAnimating || (!playerTurn && matchId)) && (
+        <View style={styles.interactionBlock} />
+      )}
     </SafeAreaView>
   );
 };

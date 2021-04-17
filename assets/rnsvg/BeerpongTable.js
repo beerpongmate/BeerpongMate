@@ -6,8 +6,8 @@ function BeerpongTable(props) {
   return (
     <Svg
       viewBox="0 0 210 297"
-          width="80%"
-      height="80%"
+      width={props.size}
+      height={props.size}
       {...props}
     >
       <G stroke="#000">
