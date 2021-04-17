@@ -12,13 +12,16 @@ import MatchLandingScreen from "../screens/MatchLandingScreen";
 import StatsScreen from "../screens/StatsScreen";
 import AchievementsScreen from "../screens/AchievementScreen";
 import MainTabScreen from "../screens/MainTabScreen";
+import MainDrawer from "../screens/MainDrawer";
+import Rules from "../screens/RulesScreen";
 import theme from "../../assets/theme";
 
 const Stack = createStackNavigator();
 
 const MainStack = () => (
   <Stack.Navigator
-    initialRouteName="Welcome"
+    initialRouteName="MainDrawer"
+    options={{ headerShown: false }}
     screenOptions={{
       headerTitle: () => <View style={{ height: 20 }} />,
       // headerTransparent: true,
@@ -29,10 +32,16 @@ const MainStack = () => (
     }}
   >
     <Stack.Screen
+      name="MainDrawer"
+      component={MainDrawer}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
       name="Welcome"
       component={WelcomeScreen}
       options={{ headerShown: false }}
     />
+
     <Stack.Screen name="SignIn" component={SignInScreen} />
     <Stack.Screen
       name="SignInSuccessScreen"
@@ -63,6 +72,7 @@ const MainStack = () => (
       component={MainTabScreen}
       options={{ headerShown: false }}
     />
+    <Stack.Screen name="Rules" component={Rules} />
   </Stack.Navigator>
 );
 
