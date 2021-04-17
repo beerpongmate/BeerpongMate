@@ -49,7 +49,9 @@ const WelcomeScreen = ({navigation}) => {
           zIndex: 10}}
         onPress={navigation.openDrawer}
       >
-        <Icon name="format-align-justify" size={34} color="black" />
+        <Icon name="format-align-justify" 
+        size={34} 
+        color="black" />
       </TouchableOpacity>
       <Image
         style={{ marginBottom: 35, 
