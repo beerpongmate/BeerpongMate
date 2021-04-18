@@ -1,4 +1,4 @@
-package com.beerpongmate;
+package com.vgl.beerpongportals;
 
 import com.facebook.react.ReactActivity;
 

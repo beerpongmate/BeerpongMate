@@ -4,7 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import theme from "../../assets/theme";
@@ -15,20 +15,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   inputContainer: {
     alignSelf: "center",
-    backgroundColor: theme.colors.table,
+    backgroundColor: theme.colors.cupRed,
     width: "80%",
     padding: 15,
-    paddingBottom: 60,
+    paddingBottom: 60
   },
   inputfield: {
     marginVertical: 15,
     backgroundColor: "#fff",
     padding: 5,
-    borderRadius: 3,
+    borderRadius: 3
   },
   button: {
     alignSelf: "center",
@@ -40,11 +40,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: -60,
-    backgroundColor: "#fff",
+    backgroundColor: "#fff"
   },
   buttonLabel: {
-    fontSize: 20,
-  },
+    fontSize: 20
+  }
 });
 
 const SignInScreen = () => {
@@ -59,11 +59,13 @@ const SignInScreen = () => {
     if (username) {
       signUp(email, password)
         .then(() => {
-          setUsername(username).then(() => {
-            navigate.goBack();
-           }).catch(() => { });
+          setUsername(username)
+            .then(() => {
+              navigate.goBack();
+            })
+            .catch(() => {});
         })
-        .catch(() => { });
+        .catch(() => {});
     }
   };
 
