@@ -272,7 +272,7 @@ const MatchScreen = ({ navigation, route }) => {
           round={round}
         />
       )}
-      {(isAnimating || (!playerTurn && matchId)) && (
+      {(isAnimating || winningTeam || (!playerTurn && matchId)) && (
         <View style={styles.interactionBlock} />
       )}
     </SafeAreaView>

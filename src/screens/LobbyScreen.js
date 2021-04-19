@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import partition from "lodash/partition";
+import sortBy from "lodash/sortBy";
 import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
 import { useUser } from "../components/Providers/WithUser";
@@ -70,12 +71,15 @@ const LobbyScreen = ({ navigation, route }) => {
   };
 
   const handleStartMatch = () => {
+    const sortedOrder = sortBy(players, ({ team }) => team).map(
+      ({ uid }) => uid
+    );
     createMatch({
       players,
       data: {
         throws: { 0: [], 1: [] },
-        playerTurn: user.uid,
-        order: players.map(({ uid }) => uid)
+        playerTurn: sortedOrder[0],
+        order: sortedOrder
       }
     }).then((docRef) => {
       startMatch(docRef.id);
