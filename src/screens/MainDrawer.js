@@ -4,6 +4,7 @@ import WelcomeScreen from "./WelcomeScreen";
 import AchievementsScreen from "./AchievementScreen";
 import DrawerContents from "../components/DrawerContent";
 import Rules from "./RulesScreen";
+import OnboardingScreen from "./onboardingScreen";
 
 const Drawer = createDrawerNavigator();
 

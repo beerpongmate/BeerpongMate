@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
       marginLeft: 20,
       marginRight: 20,
       textAlign: "center",
-      //fontWeight: "100",
+      // fontWeight: "100",
       fontFamily: "Rubik",
       lineHeight: 30,
     },
@@ -68,7 +68,7 @@ const Rules = ({navigation}) => (
       </Text>
     
       <Text style={styles.heading}>General Gameplay</Text>
-      <Text style={styles.text} >
+      <Text style={styles.text}>
         Beer Pong is generally played by teams of two in which each team takes turn throwing a 
         table tennis ball into the other team’s cups. Once a ball lands in a cup, the cup is taken away 
         and the opponent then drinks the contents of the cup. If both teammates hit cups, the balls are 
@@ -78,11 +78,15 @@ const Rules = ({navigation}) => (
       </Text>
       <Text style={styles.heading}>Deciding who goes first</Text>
 
-      <Text style={styles.text}>Generally you settle this in a game of rock, paper, scissors!
+      <Text style={styles.text}>
+        Generally you settle this in a game of rock, paper, scissors!
       </Text>
 
-      <Text style={styles.heading}>Re-Rack
+      <Text style={styles.heading}>
+        Re-Rack
       </Text>
+
+
       <Text style={styles.text}>
         Twice per game, each team can request the cups to be rearranged at the start of their turn. This is known as re-racking, 
         racking, or reforming. Racking may take place when you have remaining cups in the amount of 6, 3, or 1. If you get balls 
@@ -90,19 +94,9 @@ const Rules = ({navigation}) => (
         be pulled back and centered.
       </Text>
 
-      <Text style={styles.heading}>Bouncing
+      <Text style={styles.heading}>
+        Rebuttal
       </Text>
-
-      <Text style={styles.text}>
-        If a ball hits the table and then goes into a cup (even by accident), the cup that the ball goes into is removed, as well as 
-        another cup of the defending player’s choice. If there are only 2 cups remaining, the bounce only counts as one cup, so it’s fairly 
-        useless to bounce on the last 2 cups….unless you’re simply trying to be a tough guy. We’ve heard some of the manlier men out there 
-        claim “Bouncing is for bitches” but we like this rule as it helps keep focus to the game, therefore speeding things up.
-      </Text>
-
-
-      <Text style={styles.heading}>Rebuttal<
-          /Text>
       <Text style={styles.text}>
         After the last cup is hit each player from the losing team has a chance to hit the remaining cups. Each player shoots until they miss, the 
         order in which this is done does not matter. If there are racks left over they may be used now. Once both players miss and there are remaining cups, 
@@ -110,7 +104,8 @@ const Rules = ({navigation}) => (
       </Text>
         
         
-      <Text style={styles.heading}>Overtime
+      <Text style={styles.heading}>
+        Overtime
       </Text>
 
       <Text style={styles.text}>
