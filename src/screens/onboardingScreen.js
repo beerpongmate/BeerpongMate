@@ -1,8 +1,10 @@
 import React from "react";
-import {View, Text, Button, StyleSheet, Image} from "react-native";
+import {StyleSheet, Image} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Onboarding from 'react-native-onboarding-swiper';
 import SplashScreen from "react-native-splash-screen";
+import PrimaryButton from "../components/Buttons/PrimaryButton";
+import theme from "../../assets/theme";
 
 const styles = StyleSheet.create({
     container: {
@@ -10,9 +12,41 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         resizeMode: "contain",
-    
+    },
+        buttonText: {
+          fontSize: 10,
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          color: "white",
+          justifyContent: "center",
     },
 });
+
+const primaryColor = theme.colors.cupRed
+const secondaryColor = theme.colors.cupBlue
+
+
+const Skip = ({...props}) => (
+  <PrimaryButton
+    label="Skip"
+    color={primaryColor}
+    {...props} // is that correct?
+  />
+);
+const Next = ({...props}) => (
+  <PrimaryButton
+    label="Next"
+    color={secondaryColor}
+    {...props} // is that correct?
+  />
+);
+const Done = ({...props}) => (
+  <PrimaryButton
+    label="Got it"
+    color={secondaryColor}
+    {...props} 
+  />
+);
 
 const OnboardingScreen = ({navigation}) => {
 
@@ -24,7 +58,9 @@ const OnboardingScreen = ({navigation}) => {
 
     return(
       <Onboarding
-        styles={styles.container}
+        SkipButtonComponent={Skip}
+        NextButtonComponent={Next}
+        DoneButtonComponent={Done}
         onDone={() => navigate("MainDrawer")}
         onSkip={() => navigate("MainDrawer")}
         pages={[

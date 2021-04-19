@@ -1,7 +1,6 @@
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import WelcomeScreen from "./WelcomeScreen";
-import AchievementsScreen from "./AchievementScreen";
 import DrawerContents from "../components/DrawerContent";
 import Rules from "./RulesScreen";
 

@@ -6,7 +6,6 @@ import {
   TouchableOpacity
 } from "react-native";
 import * as React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import SplashScreen from "react-native-splash-screen";
