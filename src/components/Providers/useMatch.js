@@ -63,28 +63,73 @@ const useMatch = (matchId, user) => {
 
   const getNextPlayerId = (playerId, order, teamThrows, rebuttalPlayers) => {
     if (rebuttalPlayers && rebuttalPlayers.length > 0) {
-      return rebuttalPlayers[0];
+      return { nextPlayer: rebuttalPlayers[0] };
     }
 
+    const determineOnFire = (playerToCheck) => {
+      const playerThrows = teamThrows.filter(
+        ({ playerId: id }) => playerToCheck === id
+      );
+
+      const lastThreeThrows = takeRight(playerThrows, 3);
+
+      const filterHits = lastThreeThrows.filter(({ type }) => type === "HIT");
+
+      if (filterHits.length === 3) {
+        return playerToCheck;
+      }
+      return undefined;
+    };
+
+    const turnIndex = order.findIndex((id) => id === playerId);
+    // 4 Player logic
+    if (order.length === 4) {
+      if (turnIndex === 1 || turnIndex === 3) {
+        const prevPlayer = order[turnIndex - 1];
+        // BALLS BACK LOGIC
+        const [playerThrow] = takeRight(teamThrows, 1);
+        const prevPlayerThrows = teamThrows.filter(
+          ({ playerId }) => playerId === prevPlayer
+        );
+        const [prevPlayerThrow] = takeRight(prevPlayerThrows, 1);
+        if (playerThrow.type === "HIT" && prevPlayerThrow.type === "HIT") {
+          return { nextPlayer: prevPlayer };
+        }
+        // END OF BALLS BACK LOGIC
+        // PrevPlayer on Fire
+        const [lastThrow] = takeRight(teamThrows, 1);
+
+        if (lastThrow?.type !== "HIT") {
+          const prevPlayerOnFire = determineOnFire(prevPlayer);
+
+          if (prevPlayerOnFire !== undefined) {
+            const newOrder = order;
+            newOrder[turnIndex] = prevPlayer;
+            newOrder[turnIndex - 1] = playerId;
+
+            return { newOrder, nextPlayer: prevPlayer };
+          }
+        }
+        // End of PrevPlayer on Fire
+      }
+    }
+
+    // END OF 4 Player logic
+
     // ON FIRE logic
-    const playerThrows = teamThrows.filter(
-      ({ playerId: id }) => playerId === id
-    );
-
-    const lastThreeThrows = takeRight(playerThrows, 3);
-
-    const filterHits = lastThreeThrows.filter(({ type }) => type === "HIT");
-
-    if (filterHits.length === 3) {
-      return playerId;
+    if (order.length === 2 || turnIndex === 1 || turnIndex === 3) {
+      const playerOnFire = determineOnFire(playerId);
+      if (playerOnFire !== undefined) {
+        return { nextPlayer: playerOnFire };
+      }
     }
     // END ON FIRE logic
 
     const currentIndex = order.findIndex((id) => id === playerId);
     if (order.length - 1 === currentIndex) {
-      return order[0];
+      return { nextPlayer: order[0] };
     }
-    return order[currentIndex + 1];
+    return { nextPlayer: order[currentIndex + 1] };
   };
 
   const addThrow = (data) => {
@@ -101,6 +146,7 @@ const useMatch = (matchId, user) => {
 
       const isWinningThrow = data?.hitId === "1-1";
 
+      // REBUTTAL LOGIC
       let pendingEntry;
 
       if (isWinningThrow) {
@@ -125,16 +171,20 @@ const useMatch = (matchId, user) => {
         }
       }
 
+      // END OF REBUTTAL LOGIC
+
+      const { nextPlayer, newOrder } = getNextPlayerId(
+        user.uid,
+        order,
+        throws[team],
+        pendingEntry?.pendingWinner?.rebuttalPlayers
+      );
+
       return matchRef.current.update({
         data: {
           throws,
-          playerTurn: getNextPlayerId(
-            user.uid,
-            order,
-            throws[team],
-            pendingEntry?.pendingWinner?.rebuttalPlayers
-          ),
-          order,
+          playerTurn: nextPlayer,
+          order: newOrder || order,
           ...pendingEntry
         }
       });
