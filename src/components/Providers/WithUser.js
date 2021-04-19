@@ -14,21 +14,29 @@ const WithUser = ({ children }) => {
   };
   const signOut = () => auth().signOut();
 
+  const reload = () => {
+    setUser(auth().currentUser);
+  };
+
   const signIn = (email, password) =>
     auth().signInWithEmailAndPassword(email, password);
-  
-  const signUp = (email, password) => auth().createUserWithEmailAndPassword(email, password);
 
-  const setUsername = (username) => auth().currentUser.updateProfile({
-    displayName: username
-  });
+  const signUp = (email, password) =>
+    auth().createUserWithEmailAndPassword(email, password);
+
+  const setUsername = (username) =>
+    auth().currentUser.updateProfile({
+      displayName: username
+    });
 
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
   return (
-    <UserContext.Provider value={{ user, signIn, signOut, signUp, setUsername }}>
+    <UserContext.Provider
+      value={{ user, signIn, signOut, signUp, setUsername, reload }}
+    >
       {children}
     </UserContext.Provider>
   );

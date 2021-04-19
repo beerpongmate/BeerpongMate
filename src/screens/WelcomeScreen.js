@@ -10,7 +10,7 @@ import * as React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
-import SplashScreen from "react-native-splash-screen";
+import RNBootSplash from "react-native-bootsplash";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
 import WelcomeButton from "../components/Buttons/PrimaryButton";
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const img = require("../../assets/images/bpLogo.png");
+const img = require("../../assets/images/logo/logo_banner.png");
 
 const screenWidth = Dimensions.get("window").width;
 const logoHeight = screenWidth * 1;
@@ -45,7 +45,7 @@ const WelcomeScreen = ({ navigation }) => {
   const { user, signOut } = useUser();
 
   React.useEffect(() => {
-    SplashScreen.hide();
+    RNBootSplash.hide({ fade: true });
   });
 
   return (

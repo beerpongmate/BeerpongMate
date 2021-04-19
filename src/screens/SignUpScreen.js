@@ -53,7 +53,7 @@ const SignInScreen = () => {
   const [username, setName] = useState(null);
 
   const navigate = useNavigation();
-  const { signUp, setUsername } = useUser();
+  const { signUp, setUsername, reload } = useUser();
 
   const handleSignUp = () => {
     if (username) {
@@ -61,6 +61,7 @@ const SignInScreen = () => {
         .then(() => {
           setUsername(username)
             .then(() => {
+              reload();
               navigate.goBack();
             })
             .catch(() => {});

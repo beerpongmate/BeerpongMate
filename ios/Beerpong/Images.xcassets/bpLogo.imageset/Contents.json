@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "bpLogo.png",
+      "filename" : "logo_banner-2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "bpLogo@2x.png",
+      "filename" : "logo_banner-1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "bpLogo@3x.png",
+      "filename" : "logo_banner.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
