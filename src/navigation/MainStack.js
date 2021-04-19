@@ -15,13 +15,22 @@ import MainTabScreen from "../screens/MainTabScreen";
 import MainDrawer from "../screens/MainDrawer";
 import Rules from "../screens/RulesScreen";
 import theme from "../../assets/theme";
-import OnboardingScreen from "../screens/onboardingScreen";
+import OnboardingScreen from "../screens/OnboardingScreen";
 
 const Stack = createStackNavigator();
 
 const MainStack = () => (
   <Stack.Navigator
     initialRouteName="Onboarding"
+    options={{ headerShown: false }}
+    screenOptions={{
+      headerTitle: () => <View style={{ height: 20 }} />,
+      // headerTransparent: true,
+      headerStyle: {},
+      headerBackTitle: "Back",
+      headerTintColor: theme.colors.cupBlue,
+      headerTitleStyle: {}
+    }}
   >
     <Stack.Screen
       name="Onboarding"
