@@ -1,100 +1,167 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   SafeAreaView,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import theme from "../../assets/theme";
 import { useUser } from "../components/Providers/WithUser";
 import ThemedText from "../components/ThemedComponents/ThemedText";
+import FieldError from "../components/FieldError";
+import PrimaryButton from "../components/Buttons/PrimaryButton";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    justifyContent: "center"
-  },
-  inputContainer: {
-    alignSelf: "center",
-    backgroundColor: theme.colors.cupRed,
-    width: "80%",
-    padding: 15,
-    paddingBottom: 60
+    justifyContent: "center",
+    flexDirection: "column"
   },
   inputfield: {
     marginVertical: 15,
     backgroundColor: "#fff",
     padding: 5,
-    borderRadius: 3
-  },
-  button: {
-    alignSelf: "center",
-    height: 120,
-    width: 120,
-    borderRadius: 60,
+    borderRadius: 25,
     borderWidth: 2,
-    borderColor: "grey",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: -60,
-    backgroundColor: "#fff"
+    borderColor: theme.colors.cupBlue,
+    fontSize: 18,
+    height: 50,
+    fontWeight: "bold"
   },
-  buttonLabel: {
-    fontSize: 20
+  headerText: {
+    fontSize: 38,
+    marginBottom: 25,
+    textAlign: "center"
+  },
+  inputContainer: {
+    marginHorizontal: 15
   }
 });
 
 const SignInScreen = () => {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [passwordConfirm, setPasswordConfirm] = useState(null);
   const [username, setName] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState(null);
 
   const navigate = useNavigation();
   const { signUp, setUsername, reload } = useUser();
 
+  const passwordInput = useRef();
+  const passwordConfirmInput = useRef();
+  const usernameInput = useRef();
+
   const handleSignUp = () => {
-    if (username) {
-      signUp(email, password)
-        .then(() => {
-          setUsername(username)
-            .then(() => {
-              reload();
-              navigate.goBack();
-            })
-            .catch(() => {});
-        })
-        .catch(() => {});
-    }
+    setLoading(true);
+    signUp(email, password)
+      .then(() => {
+        setUsername(username)
+          .then(() => {
+            reload();
+            navigate.goBack();
+          })
+          .catch((error) => setError(error.nativeErrorMessage))
+          .finally(() => {
+            setTimeout(() => setLoading(false), 500);
+          });
+      })
+      .catch((error) => setError(error.nativeErrorMessage))
+      .finally(() => {
+        setTimeout(() => setLoading(false), 500);
+      });
   };
 
+  const isDisabled = !email || !password || !passwordConfirm || !username;
+  const passwordsDontMatch =
+    password?.length > 1 &&
+    passwordConfirm?.length > 1 &&
+    password !== passwordConfirm;
+  const passwordMatchError = passwordsDontMatch
+    ? "The passwords do not match"
+    : null;
+
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.inputfield}
-          placeholder="eMail"
-          keyboardType="email-address"
-          onChangeText={setEmail}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <SafeAreaView style={styles.container}>
+        <View style={styles.inputContainer}>
+          <ThemedText style={styles.headerText}>Lets get started</ThemedText>
+
+          <TextInput
+            style={styles.inputfield}
+            placeholder="Email"
+            keyboardType="email-address"
+            onChangeText={setEmail}
+            placeholderTextColor="grey"
+            textAlign="center"
+            onSubmitEditing={() => {
+              passwordInput.current.focus();
+            }}
+            blurOnSubmit={false}
+            returnKeyType="next"
+          />
+          <TextInput
+            ref={(input) => {
+              passwordInput.current = input;
+            }}
+            onSubmitEditing={() => {
+              passwordConfirmInput.current.focus();
+            }}
+            blurOnSubmit={false}
+            returnKeyType="next"
+            style={styles.inputfield}
+            placeholder="Password"
+            secureTextEntry
+            onChangeText={setPassword}
+            placeholderTextColor="grey"
+            textAlign="center"
+          />
+          <TextInput
+            ref={(input) => {
+              passwordConfirmInput.current = input;
+            }}
+            onSubmitEditing={() => {
+              usernameInput.current.focus();
+            }}
+            blurOnSubmit={false}
+            returnKeyType="next"
+            style={styles.inputfield}
+            placeholder="Confirm Password"
+            secureTextEntry
+            onChangeText={setPasswordConfirm}
+            placeholderTextColor="grey"
+            textAlign="center"
+          />
+          <TextInput
+            ref={(input) => {
+              usernameInput.current = input;
+            }}
+            style={styles.inputfield}
+            placeholder="What shall we call you?"
+            onChangeText={setName}
+            placeholderTextColor="grey"
+            textAlign="center"
+          />
+          <FieldError error={passwordMatchError || error} />
+        </View>
+
+        <PrimaryButton
+          label="Get Started"
+          disabled={isDisabled || loading}
+          onPress={handleSignUp}
+          color={theme.colors.cupRed}
         />
-        <TextInput
-          style={styles.inputfield}
-          placeholder="Password"
-          secureTextEntry
-          onChangeText={setPassword}
-        />
-        <TextInput
-          style={styles.inputfield}
-          placeholder="What shall we call you?"
-          onChangeText={setName}
-        />
-      </View>
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <ThemedText style={styles.buttonLabel}>SIGN UP</ThemedText>
-      </TouchableOpacity>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
