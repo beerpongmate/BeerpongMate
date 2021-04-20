@@ -36,21 +36,40 @@ const styles = StyleSheet.create({
   }
 });
 
-const PrimaryButton = ({ color, onPress, label, style, containerStyle }) => (
+const disabledColor = "grey";
+
+const PrimaryButton = ({
+  color,
+  onPress,
+  label,
+  style,
+  containerStyle,
+  disabled
+}) => (
   <View style={[styles.shadow, style]}>
     <TouchableOpacity
-      style={[styles.container, { borderColor: color }]}
+      style={[
+        styles.container,
+        { borderColor: disabled ? disabledColor : color }
+      ]}
       onPress={onPress}
+      disabled={disabled}
     >
       <View
         style={[
           styles.innerContainer,
           containerStyle,
-          { borderColor: color, backgroundColor: color }
+          {
+            borderColor: disabled ? disabledColor : color,
+            backgroundColor: disabled ? disabledColor : color
+          }
         ]}
       >
         <ThemedText
-          style={[styles.textStyle, { color: color ? "#fff" : "black" }]}
+          style={[
+            styles.textStyle,
+            { color: color || disabled ? "#fff" : "black" }
+          ]}
         >
           {label}
         </ThemedText>
