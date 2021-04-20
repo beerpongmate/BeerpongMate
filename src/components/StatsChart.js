@@ -30,8 +30,11 @@ const StatsChart = ({ matchData, style }) => {
   const matchDataFiltered = matchData.filter(({ hitRate }) => !isNaN(hitRate));
   const dataFormatted = matchDataFiltered.map(({ hitRate }) => hitRate);
   const labels = matchDataFiltered.map(({ win, remainingCups }) => {
-    const label = win ? "Win" : "Loss";
+    let label = win ? "Win" : "Loss";
     const { 0: team1, 1: team2 } = remainingCups;
+    if (team1 === team2) {
+      label = "Draw";
+    }
 
     return `${label} \n${team1}:${team2}`;
   });
