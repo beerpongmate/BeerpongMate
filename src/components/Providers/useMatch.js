@@ -135,10 +135,10 @@ const useMatch = (matchId, user) => {
   const addThrow = (data) => {
     if (winningTeam === undefined) {
       const { data: matchData, players } = matchDataRef.current || {};
-      const { order, throws, pendingWinner } = matchData || {};
+      const { order, throws, pendingWinner, actionIndex = 0 } = matchData || {};
       const player = players.find(({ uid }) => uid === user.uid);
       const { team } = player || {};
-      throws[team] = [...(throws[team] || []), data];
+      throws[team] = [...(throws[team] || []), { ...data, actionIndex }];
       const opponentTeam = team === 0 ? 1 : 0;
       const opponentPlayers = players
         .filter(({ team }) => team === opponentTeam)
@@ -185,6 +185,7 @@ const useMatch = (matchId, user) => {
           throws,
           playerTurn: nextPlayer,
           order: newOrder || order,
+          actionIndex: actionIndex + 1,
           ...pendingEntry
         }
       });
