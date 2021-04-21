@@ -18,7 +18,28 @@ import theme from "../../assets/theme";
 import OnboardingScreen from "../screens/OnboardingScreen";
 
 const Stack = createStackNavigator();
+  {/*const [isFirstLaunch, setIsFirstLaunch] = React.useState(null);
 
+useEffect(() => {
+  AsyncStorage.getItem("alreadyLaunched".then(value => {
+    if(value = null){
+      AsyncStorage.setItem("alreadyLaunched", "true");
+      setIsFirstLaunched(true);
+    } else {
+      setIsFirstLaunch(false);
+    }
+  }),
+},
+[]);
+
+if ( isFirstLaunch === null) {
+  return null;
+} else if (isFirstLaunch === true) {
+  return (
+
+  )
+}
+*/}
 const MainStack = () => (
   <Stack.Navigator
     initialRouteName="Onboarding"
