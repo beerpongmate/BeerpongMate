@@ -94,7 +94,7 @@ const SignInScreen = () => {
     >
       <SafeAreaView style={styles.container}>
         <View style={styles.inputContainer}>
-          <ThemedText style={styles.headerText}>Lets get started</ThemedText>
+          <ThemedText style={styles.headerText}>Let's get started</ThemedText>
 
           <TextInput
             style={styles.inputfield}
