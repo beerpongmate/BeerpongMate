@@ -120,10 +120,6 @@ const LobbyScreen = ({ navigation, route }) => {
     }
   }, [lobby]);
 
-  const copyToClipboard = () => {
-    Clipboard.setString(lobby?.channel?.invite);
-  };
-
   return (
     <View style={styles.outerContainer}>
       <SafeAreaView style={styles.container}>
@@ -140,11 +136,6 @@ const LobbyScreen = ({ navigation, route }) => {
           playerCount={Math.round(playerCount * 0.5)}
           team={1}
         />
-        <View>
-          <TouchableOpacity onPress={copyToClipboard}>
-            <ThemedText>{lobby?.channel?.invite}</ThemedText>
-          </TouchableOpacity>
-        </View>
         <PrimaryButton
           onPress={readyUp}
           color={theme.colors.cupRed}

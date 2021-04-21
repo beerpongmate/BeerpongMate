@@ -13,8 +13,6 @@ import FieldError from "../components/FieldError";
 import ThemedText from "../components/ThemedComponents/ThemedText";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 
-const cupImg = require("../../assets/images/cup_real.jpg");
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -42,13 +40,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15
   }
 });
-
-const errorMapping = {
-  "auth/user-not-found": {
-    de: "This user does not exist.",
-    en: "Whatever"
-  }
-};
 
 const SignInScreen = () => {
   const [error, setError] = useState(null);
