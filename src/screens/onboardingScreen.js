@@ -62,6 +62,7 @@ return (
       width: 6,
       height: 6,
       marginHorizontal: 3,
+      borderRadius: 3,
       backgroundColor  
 }}
   />
