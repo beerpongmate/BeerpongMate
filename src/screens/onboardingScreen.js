@@ -25,6 +25,22 @@ const styles = StyleSheet.create({
       height: 150,
       resizeMode: "contain",
     },
+    snoozedImage: {
+      width: 600,
+      height: 600,
+      // resizeMode: "contain", 
+      // position: "absolute",
+      marginBottom: -150,
+      marginTop: -150,
+    },
+    bellImage: {
+      width: 300,
+      height: "100%",
+      //resizeMode: "contain", 
+      //position: "absolute",
+      marginBottom: -400,
+      marginTop: -50,
+    }
 });
 
 const primaryColor = theme.colors.cupRed
@@ -88,6 +104,11 @@ const OnboardingScreen = ({navigation}) => {
         pages={[
     {
       backgroundColor: '#fff',
+      image: <Image style={styles.snoozedImage} source={require('../../assets/images/achievements/snoozed.png')} />,
+      title: 'Bored?',
+    },
+    {
+      backgroundColor: '#fff',
       image: <Image style={styles.imageStyle} source={require('../../assets/images/bpLogo.png')} />,
       title: 'Welcome to Beerpong Portals',
       subtitle: 'you can connect with your friends from anywhere you want - anytime',
@@ -106,9 +127,9 @@ const OnboardingScreen = ({navigation}) => {
       },
       {
         backgroundColor: '#fff',
-        // image: <Image source={require('../../assets/images/cup_real.png')} />,
-        title: 'Lets go',
-        subtitle: 'mark your game progress in the app to keep track of your match. For every match played you can unlock great achievements and track your skill in a lifetime statistic. Good luck and bottoms up!',
+        image: <Image style={styles.bellImage} source={require('../../assets/images/achievements/fire.png')} />,
+        title: 'Bring your A-Game',
+        subtitle: 'Mark your game progress in the app to keep track of your match. For every match played you can unlock great achievements and track your skill in a lifetime statistic. Good luck and bottoms up!',
       },
   ]}
       />
