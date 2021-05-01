@@ -81,7 +81,6 @@ const Dots = ({ selected }) => {
 
 const OnboardingScreen = ({ route, navigation }) => {
   const { navigate } = useNavigation();
-  console.log(route);
   const { inDrawer } = route?.params || {};
   const [resetOnboarding, setResetOnboarding] = React.useState(false);
 
