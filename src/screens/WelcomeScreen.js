@@ -9,6 +9,7 @@ import * as React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import SplashScreen from "react-native-splash-screen";
+import AsyncStorage from "@react-native-community/async-storage";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
 import WelcomeButton from "../components/Buttons/PrimaryButton";
@@ -44,6 +45,7 @@ const WelcomeScreen = ({ navigation }) => {
 
   React.useEffect(() => {
     SplashScreen.hide();
+    AsyncStorage.setItem("showOnboarding", "false").catch(console.error);
   });
 
   return (
