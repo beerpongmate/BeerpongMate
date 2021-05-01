@@ -3,13 +3,14 @@ import {
   StyleSheet,
   Image,
   Dimensions,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from "react-native";
 import * as React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
-import SplashScreen from "react-native-splash-screen";
 import AsyncStorage from "@react-native-community/async-storage";
+import RNBootSplash from "react-native-bootsplash";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
 import WelcomeButton from "../components/Buttons/PrimaryButton";
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const img = require("../../assets/images/bpLogo.png");
+const img = require("../../assets/images/logo/logo_banner.png");
 
 const screenWidth = Dimensions.get("window").width;
 const logoHeight = screenWidth * 1;
@@ -44,8 +45,8 @@ const WelcomeScreen = ({ navigation }) => {
   const { user, signOut } = useUser();
 
   React.useEffect(() => {
-    SplashScreen.hide();
     AsyncStorage.setItem("showOnboarding", "false").catch(console.error);
+    RNBootSplash.hide({ fade: true });
   });
 
   return (
@@ -56,59 +57,63 @@ const WelcomeScreen = ({ navigation }) => {
       >
         <Icon name="format-align-justify" size={34} color="black" />
       </TouchableOpacity>
-      <Image
-        style={{
-          position: "absolute",
-          width: "100%",
-          height: logoHeight,
-          top: 0,
-          alignSelf: "flex-start"
-        }}
-        resizeMode="contain"
-        source={img}
-      />
-      <ThemedText style={styles.helloWorld}>
-        {user ? user.displayName : "Guest"}
-      </ThemedText>
+      <View style={{ flex: 1, justifyContent: "center" }}>
+        <Image
+          style={{
+            // position: "absolute",
+            width: "100%",
+            height: logoHeight,
+            top: 0,
+            alignSelf: "flex-start"
+          }}
+          resizeMode="contain"
+          source={img}
+        />
+      </View>
+      <View>
+        <ThemedText style={styles.helloWorld}>
+          {user ? user.displayName : "Guest"}
+        </ThemedText>
 
-      {user && (
-        <>
-          <WelcomeButton
-            onPress={() => navigate("Online")}
-            label="Online Match"
-            color={primaryColor}
-          />
-          <WelcomeButton
-            onPress={() => navigate("Stats")}
-            label="Statistics"
-            color={secondaryColor}
-          />
-          <WelcomeButton
-            onPress={() => navigate("Achievements")}
-            label="Achievements"
-          />
-        </>
-      )}
-      {!user && (
-        <>
-          <WelcomeButton
-            onPress={() => navigate("SignIn")}
-            label="Sign In"
-            color={primaryColor}
-          />
-          <WelcomeButton
-            onPress={() => navigate("SignUp")}
-            label="Create Account"
-            color={secondaryColor}
-          />
-        </>
-      )}
-      <WelcomeButton
-        onPress={() =>
-          navigate("Match", { players: [getUserMatchModel(user)] })}
-        label="Practice Mode"
-      />
-      {user && <WelcomeButton onPress={signOut} label="Sign Out" />}
+        {user && (
+          <>
+            <WelcomeButton
+              onPress={() => navigate("Online")}
+              label="Online Match"
+              color={primaryColor}
+            />
+            <WelcomeButton
+              onPress={() => navigate("Stats")}
+              label="Statistics"
+              color={secondaryColor}
+            />
+            <WelcomeButton
+              onPress={() => navigate("Achievements")}
+              label="Achievements"
+            />
+          </>
+        )}
+        {!user && (
+          <>
+            <WelcomeButton
+              onPress={() => navigate("SignIn")}
+              label="Sign In"
+              color={primaryColor}
+            />
+            <WelcomeButton
+              onPress={() => navigate("SignUp")}
+              label="Create Account"
+              color={secondaryColor}
+            />
+          </>
+        )}
+        <WelcomeButton
+          onPress={() =>
+            navigate("Match", { players: [getUserMatchModel(user)] })}
+          label="Practice Mode"
+        />
+        {user && <WelcomeButton onPress={signOut} label="Sign Out" />}
+      </View>
     </SafeAreaView>
   );
 };

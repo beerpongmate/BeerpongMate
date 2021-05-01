@@ -11,6 +11,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import Clipboard from "@react-native-clipboard/clipboard";
 import partition from "lodash/partition";
+import sortBy from "lodash/sortBy";
 import useLobby from "../components/Providers/useLobby";
 import useMatch from "../components/Providers/useMatch";
 import { useUser } from "../components/Providers/WithUser";
@@ -70,12 +71,15 @@ const LobbyScreen = ({ navigation, route }) => {
   };
 
   const handleStartMatch = () => {
+    const sortedOrder = sortBy(players, ({ team }) => team).map(
+      ({ uid }) => uid
+    );
     createMatch({
       players,
       data: {
         throws: { 0: [], 1: [] },
-        playerTurn: user.uid,
-        order: players.map(({ uid }) => uid)
+        playerTurn: sortedOrder[0],
+        order: sortedOrder
       }
     }).then((docRef) => {
       startMatch(docRef.id);
@@ -116,10 +120,6 @@ const LobbyScreen = ({ navigation, route }) => {
     }
   }, [lobby]);
 
-  const copyToClipboard = () => {
-    Clipboard.setString(lobby?.channel?.invite);
-  };
-
   return (
     <View style={styles.outerContainer}>
       <SafeAreaView style={styles.container}>
@@ -136,11 +136,6 @@ const LobbyScreen = ({ navigation, route }) => {
           playerCount={Math.round(playerCount * 0.5)}
           team={1}
         />
-        <View>
-          <TouchableOpacity onPress={copyToClipboard}>
-            <ThemedText>{lobby?.channel?.invite}</ThemedText>
-          </TouchableOpacity>
-        </View>
         <PrimaryButton
           onPress={readyUp}
           color={theme.colors.cupRed}

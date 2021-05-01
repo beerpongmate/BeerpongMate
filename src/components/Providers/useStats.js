@@ -12,7 +12,7 @@ const initialStats = {
   bestHitStreak: 0
 };
 
-const getLongestPlayerHitStreak = (throws) => {
+export const getLongestPlayerHitStreak = (throws) => {
   const normalizedArray = throws.map(({ type }) => type === "HIT");
 
   let longestStreak = 0;
@@ -92,6 +92,8 @@ const useStats = (userId, matchId) => {
       ).length;
 
       const longestHitStreak = getLongestPlayerHitStreak(playerThrows);
+
+      console.log(longestHitStreak);
 
       const {
         hitCount,

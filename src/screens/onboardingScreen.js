@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Image, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Onboarding from "react-native-onboarding-swiper";
-import SplashScreen from "react-native-splash-screen";
+import RNBootSplash from "react-native-bootsplash";
 import PrimaryButton from "../components/Buttons/PrimaryButton";
 import theme from "../../assets/theme";
 
@@ -86,7 +86,7 @@ const OnboardingScreen = ({ route, navigation }) => {
   const [resetOnboarding, setResetOnboarding] = React.useState(false);
 
   React.useEffect(() => {
-    SplashScreen.hide();
+    RNBootSplash.hide({ fade: true });
   }, []);
 
   const exitFn = inDrawer
