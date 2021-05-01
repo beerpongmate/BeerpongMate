@@ -78,11 +78,12 @@ const SignInScreen = () => {
       });
   };
 
-  const isDisabled = !email || !password || !passwordConfirm || !username;
   const passwordsDontMatch =
     password?.length > 1 &&
     passwordConfirm?.length > 1 &&
     password !== passwordConfirm;
+  const isDisabled =
+    passwordsDontMatch || !email || !password || !passwordConfirm || !username;
   const passwordMatchError = passwordsDontMatch
     ? "The passwords do not match"
     : null;

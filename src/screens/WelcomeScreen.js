@@ -7,9 +7,9 @@ import {
   View
 } from "react-native";
 import * as React from "react";
-import { createDrawerNavigator } from "@react-navigation/drawer";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-community/async-storage";
 import RNBootSplash from "react-native-bootsplash";
 import { useUser } from "../components/Providers/WithUser";
 import getUserMatchModel from "../utils/getUserMatchModel";
@@ -45,6 +45,7 @@ const WelcomeScreen = ({ navigation }) => {
   const { user, signOut } = useUser();
 
   React.useEffect(() => {
+    AsyncStorage.setItem("showOnboarding", "false").catch(console.error);
     RNBootSplash.hide({ fade: true });
   });
 

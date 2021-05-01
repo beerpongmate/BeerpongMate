@@ -3,7 +3,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import React from "react";
 import { StyleSheet, View } from 'react-native';
 import AchievementsScreen from './AchievementScreen';
-import OnlineScreen from './OnlineScreen';
 import MatchLandingScreen from './MatchLandingScreen';
 import ThemedText from '../components/ThemedComponents/ThemedText';
 
