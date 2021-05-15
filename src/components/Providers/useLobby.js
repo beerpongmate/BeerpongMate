@@ -2,6 +2,7 @@ import firestore from "@react-native-firebase/firestore";
 import React, { useRef, useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { isUndefined } from "lodash";
+import { useUser } from "./WithUser";
 
 const useLobby = ({ lobbyId, userId }) => {
   const subscriber = useRef(() => {});
@@ -30,10 +31,12 @@ const useLobby = ({ lobbyId, userId }) => {
         subscriber.current();
         subscriber.current = firestore()
           .collection("Lobbies")
+          .where("inviteKey", "==", null)
           .onSnapshot(
             (querySnapshot) => {
               const lobbyArray = [];
-              querySnapshot.forEach((snapLobby) => {
+              console.log(querySnapshot);
+              querySnapshot.docs.forEach((snapLobby) => {
                 lobbyArray.push({ id: snapLobby.id, ...snapLobby.data() });
               });
               setLobbies(lobbyArray);
@@ -77,6 +80,26 @@ const useLobby = ({ lobbyId, userId }) => {
         [`players.${user.uid}`]: { name: user.displayName, ready: false }
       });
 
+  const findLobby = (inviteKey) =>
+    new Promise((resolve, reject) => {
+      firestore()
+        .collection("Lobbies")
+        .where("inviteKey", "==", inviteKey)
+        .get()
+        .then((querySnapshot) => {
+          console.log(querySnapshot);
+          if (querySnapshot?.docs?.length === 0) {
+            reject("No Lobby was found for your code.");
+          } else {
+            resolve({
+              id: querySnapshot?.docs[0].id,
+              ...querySnapshot?.docs[0].data()
+            });
+          }
+        })
+        .catch(reject);
+    });
+
   const joinTeam = (team) => {
     const playerData = lobby?.players[userId];
     if (isUndefined(team)) {
@@ -117,7 +140,8 @@ const useLobby = ({ lobbyId, userId }) => {
     joinTeam,
     readyUp,
     startMatch,
-    deleteLobby
+    deleteLobby,
+    findLobby
   };
 };
 

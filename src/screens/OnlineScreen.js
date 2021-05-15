@@ -20,6 +20,8 @@ import PrimaryButton from "../components/Buttons/PrimaryButton";
 import ThemedOverlay from "../components/ThemedOverlay";
 import useDiscord from "../components/Providers/useDiscord";
 import LobbyComponent from "../components/LobbyComponent";
+import LobbyCreateModal from "../components/LobbyCreateModal";
+import PrivateSearchModal from "../components/PrivateSearchModal";
 
 const styles = StyleSheet.create({
   container: {
@@ -86,25 +88,28 @@ const OnlineScreen = () => {
     isServiceOnline,
     refresh
   } = useDiscord();
-  const { lobbies = [], createLobby, joinLobby } = useLobby({
+  const { lobbies = [], createLobby, joinLobby, findLobby } = useLobby({
     userId: user.uid
   });
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [privateModalVisible, setPrivateModalVisible] = useState(false);
 
-  const handleCreate = (playerCount) => {
+  const handleCreate = (playerCount, isPrivate) => {
     setModalVisible(false);
-    createLobby(getLobbyModel(user, playerCount)).then((docRef) => {
+    createLobby(getLobbyModel(user, playerCount, isPrivate)).then((docRef) => {
       navigate("Lobby", { lobbyId: docRef.id });
     });
   };
 
-  const handleJoin = ({ id, matchId, players, playerCount }) => {
+  const handleJoin = ({ id, players, playerCount }) => {
     if (Object.keys(players).length < playerCount) {
       joinLobby(id, user).then(() => {
         navigate("Lobby", { lobbyId: id });
       });
+      return true;
     }
+    return false;
   };
 
   const copyToClipboard = () => {
@@ -218,24 +223,22 @@ const OnlineScreen = () => {
           )}
         />
       </View>
-      <ThemedOverlay
-        title="Please select the Lobby settings"
-        visible={modalVisible}
-        onDismiss={() => setModalVisible(false)}
-      >
-        <View style={{ width: "100%" }}>
-          <PrimaryButton
-            label="2 vs 2"
-            onPress={() => handleCreate(4)}
-            color={theme.colors.cupRed}
-          />
-          <PrimaryButton
-            label="1 vs 1"
-            onPress={() => handleCreate(2)}
-            color={theme.colors.cupBlue}
-          />
-        </View>
-      </ThemedOverlay>
+      <LobbyCreateModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        handleCreate={handleCreate}
+      />
+      <PrivateSearchModal
+        modalVisible={privateModalVisible}
+        setModalVisible={setPrivateModalVisible}
+        findLobby={findLobby}
+        joinLobby={handleJoin}
+      />
+      <PrimaryButton
+        onPress={() => setPrivateModalVisible(true)}
+        color={theme.colors.cupBlue}
+        label="Join Private Match"
+      />
       <PrimaryButton
         onPress={() => setModalVisible(true)}
         color={theme.colors.cupRed}
