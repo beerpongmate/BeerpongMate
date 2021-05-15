@@ -34,6 +34,18 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: "center",
     flex: 1
+  },
+  inviteContainer: {
+    marginHorizontal: 15,
+    marginVertical: 15,
+    alignItems: "center"
+  },
+  inviteCode: {
+    fontSize: 20
+  },
+  inviteLabel: {
+    color: "grey",
+    fontSize: 16
   }
 });
 
@@ -46,6 +58,7 @@ const LobbyScreen = ({ navigation, route }) => {
     userId: user.uid
   });
   const { createMatch } = useMatch();
+  const { inviteKey } = lobby || {};
   const lobbyIsLoaded = useRef(false);
   const hasJoinedMatch = useRef(false);
 
@@ -68,6 +81,10 @@ const LobbyScreen = ({ navigation, route }) => {
   const changeTeam = () => {
     const teamToJoin = userTeam ? 0 : 1;
     joinTeam(teamToJoin).catch(console.log);
+  };
+
+  const copyInvite = () => {
+    Clipboard.setString(inviteKey);
   };
 
   const handleStartMatch = () => {
@@ -136,6 +153,17 @@ const LobbyScreen = ({ navigation, route }) => {
           playerCount={Math.round(playerCount * 0.5)}
           team={1}
         />
+        {inviteKey && (
+          <TouchableOpacity style={styles.inviteContainer} onPress={copyInvite}>
+            <ThemedText style={styles.inviteCode}>
+              {"Invite Code: "}
+              {inviteKey}
+            </ThemedText>
+            <ThemedText style={styles.inviteLabel}>
+              Press to copy to clipboard
+            </ThemedText>
+          </TouchableOpacity>
+        )}
         <PrimaryButton
           onPress={readyUp}
           color={theme.colors.cupRed}
