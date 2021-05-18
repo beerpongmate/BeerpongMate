@@ -32,10 +32,16 @@ const styles = StyleSheet.create({
     marginTop: -150
   },
   bellImage: {
-    width: 300,
+    width: 250,
     height: "100%",
     marginBottom: -400,
-    marginTop: -50
+    marginTop: -50,
+  },
+  carryImage: {
+    width: 290,
+    height: "100%",
+    marginBottom: -400,
+    marginTop: -50,
   },
   background: {
     backgroundColor: "#fff",
@@ -134,10 +140,15 @@ const OnboardingScreen = ({ route, navigation }) => {
           },
           {
             backgroundColor: "#fff",
-            image: <View />,
+            image: (
+              <Image
+                style={styles.bellImage}
+                source={require("../../assets/images/achievements/fire.png")}
+              />
+            ),
             title: "What you need",
             subtitle:
-              "In addition to your basic beerpong experience (cups, table, balls) you will need an extra device to record you and your setup for your opponent to see."
+              "In addition to your basic beerpong equipment (cups, table, balls) you will need an extra device to record you and your setup for your opponent to see. We will send you a Discord link via Mail. Open this link on any browser on your second device"
           },
           {
             backgroundColor: "#fff",
@@ -149,17 +160,17 @@ const OnboardingScreen = ({ route, navigation }) => {
             ),
             title: "Connect with Discord",
             subtitle:
-              "once you are logged in and joined a lobby, we will send you and your mates a Discord link. Discord is a well established third party streaming provider. It is completely free and easy to use. Head over to Discord and create an account before you start your first match. "
+              "Discord is a well established third party streaming provider. It is completely free and easy to use. Head over to Discord and create an account before you start your first match. You can stream your game, chat and have a good time. For every Match, the App will create a separate Discord channel for a little privacy"
           },
           {
             backgroundColor: "#fff",
             image: (
               <Image
-                style={styles.bellImage}
-                source={require("../../assets/images/achievements/fire.png")}
+                style={styles.carryImage}
+                source={require("../../assets/images/achievements/carry.png")}
               />
             ),
-            title: "Bring your A-Game",
+            title: "Earn great achievements",
             subtitle:
               "Mark your game progress in the app to keep track of your match. For every match played you can unlock great achievements and track your skill in a lifetime statistic. Good luck and bottoms up!"
           }
