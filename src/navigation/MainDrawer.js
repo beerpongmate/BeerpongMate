@@ -5,6 +5,7 @@ import DrawerContents from "../components/DrawerContent";
 import RulesScreen from "../screens/RulesScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import PrivacyPolicy from "../screens/PrivacyPolicyScreen";
+import LanguageScreen from "../screens/LanguageScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -19,6 +20,7 @@ function MainDrawer() {
         initialParams={{ inDrawer: true }}
       />
       <Drawer.Screen name="Privacy Policy" component={PrivacyPolicy} />
+      <Drawer.Screen name="Language" component={LanguageScreen} />
     </Drawer.Navigator>
   );
 }
