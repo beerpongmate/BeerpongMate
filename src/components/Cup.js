@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { TouchableWithoutFeedback, View, Image, Animated } from "react-native";
 
 const cupImage = require("../../assets/images/Cup.png");
+const ballImage = require("../../assets/images/ball_cropped.png");
 
 const Cup = ({ cupSize = 0, onPress, data, onAnimation, disablePress, resetPending }) => {
   const translateY = useRef(new Animated.Value(800)).current;
@@ -67,7 +68,7 @@ const Cup = ({ cupSize = 0, onPress, data, onAnimation, disablePress, resetPendi
       <View>
         <Image style={{ height: cupSize, width: cupSize }} source={cupImage} />
         {ballVisible && (
-          <Animated.View
+          <Animated.Image source={ballImage}
             style={[
               {
                 height: cupSize / 2,

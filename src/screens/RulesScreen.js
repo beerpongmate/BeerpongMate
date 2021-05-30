@@ -54,20 +54,15 @@ const Rules = ({ navigation }) => (
     <ScrollView style={styles.scrollView}>
       <Text style={styles.heading}>Setup</Text>
       <Text style={styles.text}>
-        Arrange ten (typically 18oz or 16oz) cups in a pyramid-like formation as
-        the diagram shows on each side of a beer pong table (usually about 8ft
-        long is standard). Fill each cup with the desired amount of beer (or
-        other alcohol or even water if you so choose). Traditionally two 12oz
-        beers are used to fill all ten cups, but this amount can vary depending
-        on how much you’d like to drink.
+        Arrange ten (typically 18oz or 16oz) cups in a pyramid-like formation. Fill each cup with the desired amount of beer (or
+        any other beverage of your choice)
       </Text>
 
       <Text style={styles.heading}>General Gameplay</Text>
       <Text style={styles.text}>
         Beer Pong is generally played by teams of two in which each team takes
-        turn throwing a table tennis ball into the other team’s cups. Once a
-        ball lands in a cup, the cup is taken away and the opponent then drinks
-        the contents of the cup. If both teammates hit cups, the balls are
+        turn throwing a table tennis ball into the other team’s cups. Of course you can crank up the casual 1v1 in this App aswell.
+        Once a ball lands in a cup, the cup is taken away. If both teammates hit cups, the balls are
         rolled back and they get to shoot again. The team that successfully hits
         all of the opponent’s cups wins the game. Since there are a vast amount
         of variation on the game, it is good to quickly go over things like
@@ -82,12 +77,10 @@ const Rules = ({ navigation }) => (
       <Text style={styles.heading}>Re-Rack</Text>
 
       <Text style={styles.text}>
-        Twice per game, each team can request the cups to be rearranged at the
+        Twice per game, each team gets their cups rearranged at the
         start of their turn. This is known as re-racking, racking, or reforming.
-        Racking may take place when you have remaining cups in the amount of 6,
-        3, or 1. If you get balls back after making 2 in a row, it is still
-        considered your turn and you may not get a rack. If requested, Last cup
-        may always be pulled back and centered.
+        Racking takes place when you have remaining cups in the amount of 6,
+        3, or 1.
       </Text>
 
       <Text style={styles.heading}>Rebuttal</Text>
@@ -102,7 +95,6 @@ const Rules = ({ navigation }) => (
 
       <Text style={styles.heading}>Overtime</Text>
 
-      <Text style={styles.heading}>Rebuttal</Text>
       <Text style={styles.text}>
         After the last cup is hit each player from the losing team has a chance
         to hit the remaining cups. Each player shoots until they miss, the order
